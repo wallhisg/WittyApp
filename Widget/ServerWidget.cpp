@@ -357,6 +357,14 @@ void ServerWidget::updateUser()
 
 void ServerWidget::processClientEvent(const ClientEvent& event)
 {
+  if (event.type() == ClientEvent::Type::User)
+  {
+    processWebEvent(event.webEvent());
+  }
+}
+
+void ServerWidget::processWebEvent(const WebEvent& event)
+{
   WApplication *app = WApplication::instance();
 
   /*
@@ -376,8 +384,8 @@ void ServerWidget::processClientEvent(const ClientEvent& event)
   /*
    * If it is not a plain message, also update the user list.
    */
-  if (event.type() != ClientEvent::Message) {
-    if (event.type() == ClientEvent::Rename && event.user() == user_)
+  if (event.type() != WebEvent::Message) {
+    if (event.type() == WebEvent::Rename && event.user() == user_)
       user_ = event.data();
 
     updateUsers();
@@ -399,7 +407,7 @@ void ServerWidget::processClientEvent(const ClientEvent& event)
   if (!loggedIn())
     return;
 
-  bool display = event.type() != ClientEvent::Message
+  bool display = event.type() != WebEvent::Message
     || !userList_
     || (users_.find(event.user()) != users_.end() && users_[event.user()]);
 
@@ -427,10 +435,11 @@ void ServerWidget::processClientEvent(const ClientEvent& event)
      * Little javascript trick to make sure we scroll along with new content
      */
     app->doJavaScript(messages_->jsRef() + ".scrollTop += "
-		       + messages_->jsRef() + ".scrollHeight;");
+           + messages_->jsRef() + ".scrollHeight;");
 
     /* If this message belongs to another user, play a received sound */
     if (event.user() != user_ && messageReceived_)
       messageReceived_->play();
   }
+
 }

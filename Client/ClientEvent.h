@@ -15,27 +15,22 @@
 #include <set>
 #include <map>
 #include <boost/thread.hpp>
+#include <Device.h>
 
 namespace Wt {
   class WServer;
 }
 
-/**
- * @addtogroup chatexample
- */
-/*@{*/
+using namespace Wt;
+using namespace std;
 
-/*! \brief Encapsulate a chat event.
- */
-class ClientEvent
+class WebEvent
 {
 public:
-  /*! \brief Enumeration for the event type.
-   */
-  enum Type { Login, Logout, Rename, Message };
+  WebEvent()
+  {}
 
-  /*! \brief Get the event type.
-   */
+  enum Type { Login, Logout, Rename, Message, Device, User, Admin  };
   Type type() const { return type_; }
 
   /*! \brief Get the user who caused the event.
@@ -55,7 +50,18 @@ public:
    * The \p format indicates how the message should be formatted.
    */
   const Wt::WString formattedHTML(const Wt::WString& user,
-				  Wt::TextFormat format) const;
+          Wt::TextFormat format) const;
+    /*
+   * Both user and html will be formatted as html
+   */
+  WebEvent(const Wt::WString& user, const Wt::WString& message)
+    : type_(Message), user_(user), message_(message)
+  { }
+
+  WebEvent(Type type, const Wt::WString& user,
+      const Wt::WString& data = Wt::WString::Empty)
+    : type_(type), user_(user), data_(data)
+  { }
 
 private:
   Type type_;
@@ -63,16 +69,51 @@ private:
   Wt::WString data_;
   Wt::WString message_;
 
-  /*
-   * Both user and html will be formatted as html
-   */
-  ClientEvent(const Wt::WString& user, const Wt::WString& message)
-    : type_(Message), user_(user), message_(message)
-  { }
+};
 
-  ClientEvent(Type type, const Wt::WString& user,
-	    const Wt::WString& data = Wt::WString::Empty)
-    : type_(type), user_(user), data_(data)
+/**
+ * @addtogroup chatexample
+ */
+/*@{*/
+
+/*! \brief Encapsulate a chat event.
+ */
+class ClientEvent
+{
+public:
+  /*! \brief Enumeration for the event type.
+   */
+  enum Type { User };
+  Type type() const { return type_; }
+
+  enum DeviceType { attach, deatach };
+  // enum UserType { Login, Logout, Rename, Message };
+
+  // Device
+  DeviceType deviceType() const { return devType_; }
+  const string& deviceData() const { return devData_; }
+  
+  // User
+  /*! \brief Get the event type.
+   */
+  
+  const WebEvent webEvent() const { return webEvent_; }
+
+private:
+  DeviceType devType_;
+  struct device device_;
+  string devData_;
+  Type type_;
+  WebEvent webEvent_;
+
+  ClientEvent(Type type, WebEvent webEvent)
+    : type_(type),
+      webEvent_(webEvent)
+  {}
+
+  ClientEvent(DeviceType devType, const struct device &device)
+    : devType_(devType),
+      device_(device)
   { }
 
   friend class Server;

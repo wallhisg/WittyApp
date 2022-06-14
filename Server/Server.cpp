@@ -12,7 +12,7 @@
 
 using namespace Wt;
 
-const WString ClientEvent::formattedHTML(const WString& user,
+const WString WebEvent::formattedHTML(const WString& user,
 				       TextFormat format) const
 {
   switch (type_) {
@@ -94,7 +94,7 @@ bool Server::login(const WString& user)
   if (users_.find(user) == users_.end()) {
     users_.insert(user);
 
-    postClientEvent(ClientEvent(ClientEvent::Login, user));
+    postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(WebEvent::Login, user)));
 
     return true;
   } else
@@ -110,7 +110,7 @@ void Server::logout(const WString& user)
   if (i != users_.end()) {
     users_.erase(i);
 
-    postClientEvent(ClientEvent(ClientEvent::Logout, user));
+    postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(WebEvent::Logout, user)));
   }
 }
 
@@ -128,7 +128,7 @@ bool Server::changeName(const WString& user, const WString& newUser)
       users_.erase(i);
       users_.insert(newUser);
 
-      postClientEvent(ClientEvent(ClientEvent::Rename, user, newUser));
+      postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(WebEvent::Rename, user, newUser)));
 
       return true;
     } else
@@ -152,7 +152,7 @@ WString Server::suggestGuest()
 
 void Server::sendMessage(const WString& user, const WString& message)
 {
-  postClientEvent(ClientEvent(user, message));
+  postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(user, message)));
 }
 
 void Server::postClientEvent(const ClientEvent& event)
@@ -201,7 +201,7 @@ void Server::deviceAttach(Device device, const DeviceEvent &event)
     deviceMap_[devId] = device;
 
     // Emit signal to render new device
-    // postClientEvent(DeviceEvent())
+    
   }
 }
 

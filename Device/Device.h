@@ -42,7 +42,7 @@ public:
 	bool jsonParser(const string devInfo);
 	
 	struct device getDeviceInfo() const { return device_; }
-	const string getIdString() { return device_.id.toUTF8(); }
+	const string getIdString() const { return device_.id.toUTF8(); }
 
 	void setId(const WString id) { device_.id = id; }
 	void setIp(const WString ip) { device_.ip = ip; }
@@ -62,6 +62,8 @@ public:
 	const Wt::WString& message() const { return message_; }
 	const Wt::WString& data() const { return data_; }
 	
+	const string& id() const { return id_; }
+	
 	DeviceEvent(Type type, const Wt::WString& user,
 		const Wt::WString& data = Wt::WString::Empty)
 		: type_(type), user_(user), data_(data)
@@ -71,20 +73,26 @@ public:
 	DeviceEvent(Device device)
 		:	device_(device)
 	{
-
 	}
 
 	DeviceEvent(Type type)
 		: type_(type)
 	{
-
 	}
+
+	DeviceEvent(Type type, const string &id)
+		: type_(type),
+			id_(id)
+	{
+	}	
+
 private:
   Type type_;
   Wt::WString user_;
   Wt::WString data_;
   Wt::WString message_;
   Device device_;
+  string id_;
 
 
 

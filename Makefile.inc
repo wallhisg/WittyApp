@@ -2,12 +2,14 @@
 PRJ_UNIT_TEST   ?=  $(PRJ_BASE)/unitTest
 PRJ_SERVER      ?=  $(PRJ_BASE)/Server
 PRJ_CLIENT      ?=  $(PRJ_BASE)/Client
+PRJ_DEVICE      ?=  $(PRJ_BASE)/Device
 PRJ_APPLICATION ?=  $(PRJ_BASE)/Application
 PRJ_WIDGET      ?=  $(PRJ_BASE)/Widget
 
 __DIRECTORY_VARIABLES :=  \
  	PRJ_SERVER              \
  	PRJ_CLIENT              \
+  PRJ_DEVICE              \
   PRJ_APPLICATION         \
 	PRJ_WIDGET              \
 	PRJ_UNIT_TEST			
@@ -17,6 +19,7 @@ override PRJ_BASE         := $(abspath $(PRJ_BASE))
 override PRJ_UNIT_TEST    := $(abspath $(PRJ_UNIT_TEST))
 override PRJ_SERVER       := $(abspath $(PRJ_SERVER))
 override PRJ_CLIENT       := $(abspath $(PRJ_CLIENT))
+override PRJ_DEVICE       := $(abspath $(PRJ_DEVICE))
 override PRJ_APPLICATION  := $(abspath $(PRJ_APPLICATION))
 override PRJ_WIDGET       := $(abspath $(PRJ_WIDGET))
 

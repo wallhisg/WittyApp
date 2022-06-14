@@ -106,6 +106,7 @@ private:
 
   /* called from another session */
   void processClientEvent(const ClientEvent& event);
+  void processWebEvent(const WebEvent& event);
 };
 
 /*@}*/
