@@ -70,11 +70,6 @@ protected:
 			    Wt::WWidget *messageEdit,
 			    Wt::WWidget *sendButton, Wt::WWidget *logoutButton);
 
-  virtual void updateUsers();
-  virtual void newMessage();
-
-  virtual void render(Wt::WFlags<Wt::RenderFlag> flags);
-
 protected:
   bool loggedIn() const;
 
@@ -86,25 +81,10 @@ private:
   
   bool                  loggedIn_;
 
-  Wt::JSlot             clearInput_;
 
   Wt::WString           user_;
 
-  Wt::WLineEdit        *userNameEdit_;
-  Wt::WText            *statusMsg_;
-
-  Wt::WContainerWidget *messages_;
-  Wt::WTextArea        *messageEdit_;
-  Wt::WPushButton      *sendButton_;
-  Wt::WContainerWidget *userList_;
-  Wt::WSound* messageReceived_;
-
-  Wt::WContainerWidget *devWc_;
-
   void login();
-  void changeName(const Wt::WString& name);
-  void send();
-  void updateUser();
 
   /* called from another session */
   void processClientEvent(const ClientEvent& event);

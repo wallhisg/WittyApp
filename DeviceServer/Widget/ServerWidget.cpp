@@ -29,18 +29,14 @@ ServerWidget::ServerWidget(Server& server,
 				   Wt::WContainerWidget *parent)
   : WContainerWidget(parent),
     server_(server),
-    loggedIn_(false),
-    userList_(0),
-    messageReceived_(0),
-    devWc_(0)
+    loggedIn_(false)
 {
-  user_ = server_.suggestGuest();
   letLogin();
 }
 
 ServerWidget::~ServerWidget()
 {
-  delete messageReceived_;
+
   logout();
 }
 
@@ -59,51 +55,21 @@ void ServerWidget::disconnect()
 
 void ServerWidget::letLogin()
 {
-  clear();
+    clear();
+    login();
 
-  WVBoxLayout *vLayout = new WVBoxLayout();
-  setLayout(vLayout);
-
-  WHBoxLayout *hLayout = new WHBoxLayout();
-  vLayout->addLayout(hLayout, 0, AlignTop | AlignLeft);
-
-  hLayout->addWidget(new WLabel("User name:"), 0, AlignMiddle);
-  hLayout->addWidget(userNameEdit_ = new WLineEdit(user_), 0, AlignMiddle);
-  userNameEdit_->setFocus();
-
-  WPushButton *b = new WPushButton("Login");
-  hLayout->addWidget(b, 0, AlignMiddle);
-
-  b->clicked().connect(this, &ServerWidget::login);
-  userNameEdit_->enterPressed().connect(this, &ServerWidget::login);
-
-  vLayout->addWidget(statusMsg_ = new WText());
-  statusMsg_->setTextFormat(PlainText);
 }
 
 void ServerWidget::login()
 {
   if (!loggedIn()) {
-    WString name = userNameEdit_->text();
 
-    if (!messageReceived_)
-      messageReceived_ = new WSound("sounds/message_received.mp3");
-
-    if (!startChat(name))
-      statusMsg_->setText("Sorry, name '" + escapeText(name) +
-			  "' is already taken.");
   }
 }
 
 void ServerWidget::logout()
 {
-  if (loggedIn()) {
-    loggedIn_ = false;
-    server_.logout(user_);
     disconnect();
-
-    letLogin();
-  }
 }
 
 void ServerWidget::createLayout(WWidget *messages, WWidget *userList,
@@ -170,20 +136,6 @@ bool ServerWidget::loggedIn() const
   return loggedIn_;
 }
 
-void ServerWidget::render(WFlags<RenderFlag> flags)
-{
-  if (flags & RenderFull) {
-    if (loggedIn()) {
-      /* Handle a page refresh correctly */
-      messageEdit_->setText(WString::Empty);
-      doJavaScript("setTimeout(function() { "
-		   + messages_->jsRef() + ".scrollTop += "
-		   + messages_->jsRef() + ".scrollHeight;}, 0);");
-    }
-  }
-
-  WContainerWidget::render(flags);
-}
 
 bool ServerWidget::startChat(const WString& user)
 {
@@ -191,179 +143,15 @@ bool ServerWidget::startChat(const WString& user)
    * When logging in, we pass our processClientEvent method as the function that
    * is used to indicate a new chat event for this user.
    */
-  if (server_.login(user)) {
-    loggedIn_ = true;
+
     connect();
 
-    user_ = user;    
-
-    clear();
-    userNameEdit_ = 0;
-
-    messages_ = new WContainerWidget();
-    userList_ = new WContainerWidget();
-    messageEdit_ = new WTextArea();
-    messageEdit_->setRows(2);
-    messageEdit_->setFocus();
-    // Display scroll bars if contents overflows
-    messages_->setOverflow(WContainerWidget::OverflowAuto);
-    userList_->setOverflow(WContainerWidget::OverflowAuto);
-
-    sendButton_ = new WPushButton("Send");
-    WPushButton *logoutButton = new WPushButton("Logout");
-
-    createLayout(messages_, userList_, messageEdit_, sendButton_, logoutButton);
-
-    devWc_ = new WContainerWidget(this);
-    devWc_->setOverflow(WContainerWidget::OverflowAuto);
-    devWc_->addWidget(new WText("Device"));
-
-    /*
-     * Connect event handlers:
-     *  - click on button
-     *  - enter in text area
-     *
-     * We will clear the input field using a small custom client-side
-     * JavaScript invocation.
-     */
-
-    // Create a JavaScript 'slot' (JSlot). The JavaScript slot always takes
-    // 2 arguments: the originator of the event (in our case the
-    // button or text area), and the JavaScript event object.
-    clearInput_.setJavaScript
-      ("function(o, e) { setTimeout(function() {"
-       "" + messageEdit_->jsRef() + ".value='';"
-       "}, 0); }");
-
-    /*
-     * Set the connection monitor
-     *
-     * The connection monitor is a javascript monitor that will
-     * nootify the given object by calling the onChange method to
-     * inform of connection change (use of websockets, connection
-     * online/offline) Here we just disable the TextEdit when we are
-     * offline and enable it once we're back online
-     */
-    WApplication::instance()->setConnectionMonitor(
-		"window.monitor={ "
-		"'onChange':function(type, newV) {"
-		  "var connected = window.monitor.status.connectionStatus != 0;"
-		  "if(connected) {"
-			+ messageEdit_->jsRef() + ".disabled=false;"
-			+ messageEdit_->jsRef() + ".placeholder='';"
-		  "} else { "
-			+ messageEdit_->jsRef() + ".disabled=true;"
-			+ messageEdit_->jsRef() + ".placeholder='connection lost';"
-		  "}"
-		"}"
-		"}"
-		);
-
-    // Bind the C++ and JavaScript event handlers.
-    sendButton_->clicked().connect(this, &ServerWidget::send);
-    messageEdit_->enterPressed().connect(this, &ServerWidget::send);
-    sendButton_->clicked().connect(clearInput_);
-    messageEdit_->enterPressed().connect(clearInput_);
-    sendButton_->clicked().connect((WWidget *)messageEdit_,
-				   &WWidget::setFocus);
-    messageEdit_->enterPressed().connect((WWidget *)messageEdit_,
-					 &WWidget::setFocus);
-
-    // Prevent the enter from generating a new line, which is its default
-    // action
-    messageEdit_->enterPressed().preventDefaultAction();
-
-    logoutButton->clicked().connect(this, &ServerWidget::logout);
-
-    WInPlaceEdit *nameEdit = new WInPlaceEdit();
-    nameEdit->addStyleClass("name-edit");
-    nameEdit->setButtonsEnabled(false);
-    nameEdit->setText(user_);
-    nameEdit->valueChanged().connect(this, &ServerWidget::changeName);
-
-    WTemplate *joinMsg = new WTemplate(tr("join-msg.template"), messages_);
-    joinMsg->bindWidget("name", nameEdit);
-    joinMsg->setStyleClass("chat-msg");
-
-    if (!userList_->parent()) {
-      delete userList_;
-      userList_ = 0;
-    }
-
-    if (!sendButton_->parent()) {
-      delete sendButton_;
-      sendButton_ = 0;
-    }
-
-    if (!logoutButton->parent())
-      delete logoutButton;
-
-    updateUsers();
-    
     return true;
-  } else
-    return false;
-}
-
-void ServerWidget::changeName(const WString& name)
-{
-  if (!name.empty()) {
-    if (server_.changeName(user_, name))
-      user_ = name;
-  }
-}
-
-void ServerWidget::send()
-{
-  if (!messageEdit_->text().empty())
-    server_.sendMessage(user_, messageEdit_->text());
-}
-
-void ServerWidget::updateUsers()
-{
-  if (userList_) {
-    userList_->clear();
-
-    Server::UserSet users = server_.users();
-
-    UserMap oldUsers = users_;
-    users_.clear();
-
-    for (Server::UserSet::iterator i = users.begin();
-	 i != users.end(); ++i) {
-      WCheckBox *w = new WCheckBox(escapeText(*i), userList_);
-      w->setInline(false);
-
-      UserMap::const_iterator j = oldUsers.find(*i);
-      if (j != oldUsers.end())
-	w->setChecked(j->second);
-      else
-	w->setChecked(true);
-
-      users_[*i] = w->isChecked();
-      w->changed().connect(this, &ServerWidget::updateUser);
-
-      if (*i == user_)
-	w->setStyleClass("chat-self");
-    }
-  }
-}
-
-void ServerWidget::newMessage()
-{ }
-
-void ServerWidget::updateUser()
-{
-  WCheckBox *b = dynamic_cast<WCheckBox *>(sender());
-  users_[b->text()] = b->isChecked();
 }
 
 void ServerWidget::processClientEvent(const ClientEvent& event)
 {
-  // if (event.type() == ClientEvent::Type::User)
-  // {
-  //   processWebEvent(event.webEvent());
-  // }
+
     switch (event.type())
     {
         case ClientEvent::Type::User:
@@ -406,7 +194,7 @@ void ServerWidget::processWebEvent(const WebEvent& event)
     if (event.type() == WebEvent::Rename && event.user() == user_)
       user_ = event.data();
 
-    updateUsers();
+
   }
 
   /*
@@ -417,49 +205,6 @@ void ServerWidget::processWebEvent(const WebEvent& event)
    */
   app->triggerUpdate();
 
-  newMessage();
-
-  /*
-   * Anything else doesn't matter if we are not logged in.
-   */
-  if (!loggedIn())
-    return;
-
-  bool display = event.type() != WebEvent::Message
-    || !userList_
-    || (users_.find(event.user()) != users_.end() && users_[event.user()]);
-
-  if (display) {
-    WText *w = new WText(messages_);
-
-    /*
-     * If it fails, it is because the content wasn't valid XHTML
-     */
-    if (!w->setText(event.formattedHTML(user_, XHTMLText))) {
-      w->setText(event.formattedHTML(user_, PlainText));
-      w->setTextFormat(XHTMLText);
-    }
-
-    w->setInline(false);
-    w->setStyleClass("chat-msg");
-
-    /*
-     * Leave no more than 100 messages in the back-log
-     */
-    if (messages_->count() > 100)
-      delete messages_->children()[0];
-
-    /*
-     * Little javascript trick to make sure we scroll along with new content
-     */
-    app->doJavaScript(messages_->jsRef() + ".scrollTop += "
-           + messages_->jsRef() + ".scrollHeight;");
-
-    /* If this message belongs to another user, play a received sound */
-    if (event.user() != user_ && messageReceived_)
-      messageReceived_->play();
-  }
-
 }
 
 void ServerWidget::processDevicecEvent(const DeviceEvent& event)
@@ -468,9 +213,7 @@ void ServerWidget::processDevicecEvent(const DeviceEvent& event)
     std::cout << "processDevicecEvent" << std::endl;
     struct device device;
     device = event.device();
-    WText *id = new WText(device.id);
 
         
-    devWc_->addWidget(id);
 
 }
