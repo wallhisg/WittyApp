@@ -19,6 +19,7 @@
 
 #include <Device.h>
 #include <DeviceWResource.h>
+#include <DevServer.h>
 
 namespace Wt {
   class WServer;
@@ -87,15 +88,10 @@ public:
    */
   UserSet users();
 
-  void deviceAttach(Device device, const DeviceEvent &event);
-
-  // DeviceMap
-  typedef map<string, Device> DeviceMap;
-  DeviceMap deviceMap();
-
-private:
+ private:
   // Server
   Wt::WServer& server_;
+  DeviceServer devServer_;
 
   // Client
   struct ClientInfo {
@@ -110,11 +106,7 @@ private:
   UserSet users_;
   void postClientEvent(const ClientEvent& event);
 
-  // Device
-  DeviceWResource *deviceWR_;
-  DeviceMap deviceMap_;
-
-};
+ };
 
 /*@}*/
 

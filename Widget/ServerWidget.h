@@ -83,6 +83,7 @@ private:
   UserMap users_;
 
   Server&     server_;
+  
   bool                  loggedIn_;
 
   Wt::JSlot             clearInput_;
@@ -96,8 +97,9 @@ private:
   Wt::WTextArea        *messageEdit_;
   Wt::WPushButton      *sendButton_;
   Wt::WContainerWidget *userList_;
-
   Wt::WSound* messageReceived_;
+
+  Wt::WContainerWidget *devWc_;
 
   void login();
   void changeName(const Wt::WString& name);
@@ -107,6 +109,7 @@ private:
   /* called from another session */
   void processClientEvent(const ClientEvent& event);
   void processWebEvent(const WebEvent& event);
+  void processDevicecEvent(const DeviceEvent& event);
 };
 
 /*@}*/

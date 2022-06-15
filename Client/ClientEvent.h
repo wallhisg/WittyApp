@@ -63,6 +63,7 @@ public:
     : type_(type), user_(user), data_(data)
   { }
 
+
 private:
   Type type_;
   Wt::WString user_;
@@ -83,38 +84,26 @@ class ClientEvent
 public:
   /*! \brief Enumeration for the event type.
    */
-  enum Type { User };
+  enum Type { User, Device };
   Type type() const { return type_; }
-
-  enum DeviceType { attach, deatach };
-  // enum UserType { Login, Logout, Rename, Message };
-
-  // Device
-  DeviceType deviceType() const { return devType_; }
-  const string& deviceData() const { return devData_; }
-  
-  // User
-  /*! \brief Get the event type.
-   */
-  
-  const WebEvent webEvent() const { return webEvent_; }
-
-private:
-  DeviceType devType_;
-  struct device device_;
-  string devData_;
-  Type type_;
-  WebEvent webEvent_;
 
   ClientEvent(Type type, WebEvent webEvent)
     : type_(type),
       webEvent_(webEvent)
   {}
 
-  ClientEvent(DeviceType devType, const struct device &device)
-    : devType_(devType),
-      device_(device)
-  { }
+  ClientEvent(Type type, DeviceEvent devEvent)
+    : type_(type),
+    devEvent_(devEvent)
+  {}
+
+  const WebEvent webEvent() const { return webEvent_; }
+  const DeviceEvent devEvent() const { return devEvent_; }
+private:
+  Type type_;
+  WebEvent webEvent_;
+  DeviceEvent devEvent_;
+
 
   friend class Server;
 };

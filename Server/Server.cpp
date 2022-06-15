@@ -12,54 +12,11 @@
 
 using namespace Wt;
 
-const WString WebEvent::formattedHTML(const WString& user,
-				       TextFormat format) const
-{
-  switch (type_) {
-  case Login:
-    return WString::fromUTF8("<span class='chat-info'>")
-      + WWebWidget::escapeText(user_) + " joined.</span>";
-  case Logout:
-    return WString::fromUTF8("<span class='chat-info'>")
-      + ((user == user_) ?
-	 WString::fromUTF8("You") :
-	 WWebWidget::escapeText(user_))
-      + " logged out.</span>";
-  case Rename:
-    return "<span class='chat-info'>"
-      + ((user == data_ || user == user_) ?
-	 "You are" :
-	 (WWebWidget::escapeText(user_) + " is")) 
-      + " now known as " + WWebWidget::escapeText(data_) + ".</span>";
-  case Message:{
-    WString result;
-
-    result = WString("<span class='")
-      + ((user == user_) ?
-	 "chat-self" :
-	 "chat-user")
-      + "'>" + WWebWidget::escapeText(user_) + ":</span>";
-
-    WString msg
-      = (format == XHTMLText ? message_ : WWebWidget::escapeText(message_));
-
-    if (message_.toUTF8().find(user.toUTF8()) != std::string::npos)
-      return result + "<span class='chat-highlight'>" + msg + "</span>";
-    else
-      return result + msg;
-  }
-  default:
-    return "";
-  }
-}
-
-
 Server::Server(WServer& server)
   : server_(server)
 { 
-  deviceWR_ = new DeviceWResource();
-  server_.addResource(deviceWR_, "/resource");
-  deviceWR_->devEventSig().connect(SLOT(this, Server::deviceAttach));
+  server_.addResource(devServer_.deviceWResource(), "/resource");
+  devServer_.clientEventSig().connect(SLOT(this, Server::postClientEvent));
 }
 
 bool Server::connect(Client *client,
@@ -190,24 +147,3 @@ Server::UserSet Server::users()
   return result;
 }
 
-void Server::deviceAttach(Device device, const DeviceEvent &event)
-{
-  boost::recursive_mutex::scoped_lock lock(mutex_);
-
-  string devId = device.getIdString();
-
-  if (deviceMap_.count(devId) == 0)
-  {
-    deviceMap_[devId] = device;
-
-    // Emit signal to render new device
-    
-  }
-}
-
-Server::DeviceMap Server::deviceMap()
-{
-    boost::recursive_mutex::scoped_lock lock(mutex_);
-    DeviceMap res = deviceMap_;
-    return res;
-}

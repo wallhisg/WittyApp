@@ -31,7 +31,8 @@ ServerWidget::ServerWidget(Server& server,
     server_(server),
     loggedIn_(false),
     userList_(0),
-    messageReceived_(0)
+    messageReceived_(0),
+    devWc_(0)
 {
   user_ = server_.suggestGuest();
   letLogin();
@@ -204,7 +205,6 @@ bool ServerWidget::startChat(const WString& user)
     messageEdit_ = new WTextArea();
     messageEdit_->setRows(2);
     messageEdit_->setFocus();
-
     // Display scroll bars if contents overflows
     messages_->setOverflow(WContainerWidget::OverflowAuto);
     userList_->setOverflow(WContainerWidget::OverflowAuto);
@@ -214,6 +214,9 @@ bool ServerWidget::startChat(const WString& user)
 
     createLayout(messages_, userList_, messageEdit_, sendButton_, logoutButton);
 
+    devWc_ = new WContainerWidget(this);
+    devWc_->setOverflow(WContainerWidget::OverflowAuto);
+    devWc_->addWidget(new WText("Device"));
 
     /*
      * Connect event handlers:
@@ -357,10 +360,25 @@ void ServerWidget::updateUser()
 
 void ServerWidget::processClientEvent(const ClientEvent& event)
 {
-  if (event.type() == ClientEvent::Type::User)
-  {
-    processWebEvent(event.webEvent());
-  }
+  // if (event.type() == ClientEvent::Type::User)
+  // {
+  //   processWebEvent(event.webEvent());
+  // }
+    switch (event.type())
+    {
+        case ClientEvent::Type::User:
+        {
+            processWebEvent(event.webEvent());
+            break;
+        }
+        case ClientEvent::Type::Device:
+        {
+            processDevicecEvent(event.devEvent());
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 void ServerWidget::processWebEvent(const WebEvent& event)
@@ -441,5 +459,18 @@ void ServerWidget::processWebEvent(const WebEvent& event)
     if (event.user() != user_ && messageReceived_)
       messageReceived_->play();
   }
+
+}
+
+void ServerWidget::processDevicecEvent(const DeviceEvent& event)
+{
+    std::cout << "**************************" << std::endl;
+    std::cout << "processDevicecEvent" << std::endl;
+    struct device device;
+    device = event.device();
+    WText *id = new WText(device.id);
+
+        
+    devWc_->addWidget(id);
 
 }

@@ -22,19 +22,22 @@ class DeviceWResource : public WResource
 public:
 	~DeviceWResource();
 
-	// Trigger when device attach
-    Wt::Signal<Device, DeviceEvent>& devEventSig() { return devEventSig_; }
+	// Trigger when device connect
+    Wt::Signal<DeviceEvent>& devEventSig() { return devConEventSig_; }
 
-    void emitDeviceEventSig(Device device, const DeviceEvent &event)
+    void emitDeviceConEventSig(const DeviceEvent &event)
     {
-        devEventSig_.emit(device, event);
+        devConEventSig_.emit(event);
     }
+
+    bool jsonParserDevice(const string devInfo);
 
 protected:
 	void handleRequest(const Http::Request &request, Http::Response &response);
 
 private:
-	Wt::Signal<Device, DeviceEvent> devEventSig_;
+	Wt::Signal<DeviceEvent> devConEventSig_;
+	struct device device_;
 };
 
 

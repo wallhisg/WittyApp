@@ -17,6 +17,7 @@ using namespace std;
 using namespace Wt;
 
 enum device_type {BUTTON, SLIDER};
+class DeviceEvent;
 
 struct device {
 	WString id;
@@ -30,16 +31,11 @@ class Device
 {
 public:
 	Device(struct device device)
-		:	device_(device)
-	{
-
-	}
+	{}
 	Device()
-	{
-
-	}
-	// Move out later
-	bool jsonParser(const string devInfo);
+	{}
+	
+	bool connect(struct device device);
 	
 	struct device getDeviceInfo() const { return device_; }
 	const string getIdString() const { return device_.id.toUTF8(); }
@@ -56,51 +52,32 @@ private:
 class DeviceEvent
 {
 public:
-	enum Type { attach, deatach, Rename, Message };
+	DeviceEvent()
+	{}
+
+	enum Type { Connect, Disconnect, Attach, Deatach};
 	Type type() const { return type_; }
-	const Wt::WString& user() const { return user_; }
-	const Wt::WString& message() const { return message_; }
-	const Wt::WString& data() const { return data_; }
 	
-	const string& id() const { return id_; }
-	
-	DeviceEvent(Type type, const Wt::WString& user,
-		const Wt::WString& data = Wt::WString::Empty)
-		: type_(type), user_(user), data_(data)
-	{ 
-	}
-
-	DeviceEvent(Device device)
-		:	device_(device)
+  DeviceEvent(Type type)
+  	:	type_(type)
 	{
 	}
 
-	DeviceEvent(Type type)
-		: type_(type)
+  DeviceEvent(Type type, struct device &device)
+  	:	type_(type)
 	{
+		device_ = device;
 	}
 
-	DeviceEvent(Type type, const string &id)
-		: type_(type),
-			id_(id)
-	{
-	}	
+	struct device device() const { return device_; }
 
 private:
   Type type_;
-  Wt::WString user_;
-  Wt::WString data_;
-  Wt::WString message_;
-  Device device_;
-  string id_;
-
-
+  struct device device_;
 
 	friend class Server;
 };
 
 typedef boost::function<void (const DeviceEvent&)> DeviceEventCallback;
-
-
 
 #endif	//	DEVICE_H_
