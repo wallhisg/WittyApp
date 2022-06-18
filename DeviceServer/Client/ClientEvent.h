@@ -4,8 +4,8 @@
  *
  * See the LICENSE file for terms of use.
  */
-#ifndef CLIENTEVENT_H_
-#define CLIENTEVENT_H_
+#ifndef CLIENTEVENT_H
+#define CLIENTEVENT_H
 
 #include <boost/noncopyable.hpp>
 
@@ -15,14 +15,15 @@
 #include <set>
 #include <map>
 #include <boost/thread.hpp>
-#include <Device.h>
+
+#include "Device.h"
+
+using namespace Wt;
+using namespace std;
 
 namespace Wt {
   class WServer;
 }
-
-using namespace Wt;
-using namespace std;
 
 class WebEvent
 {
@@ -63,12 +64,8 @@ private:
   Wt::WString user_;
   Wt::WString data_;
   Wt::WString message_;
-
 };
 
-/**
- * @addtogroup chatexample
- */
 /*@{*/
 
 /*! \brief Encapsulate a chat event.
@@ -106,4 +103,4 @@ typedef boost::function<void (const ClientEvent&)> ClientEventCallback;
 
 /*@}*/
 
-#endif // CLIENTEVENT_H_
+#endif // CLIENTEVENT_H

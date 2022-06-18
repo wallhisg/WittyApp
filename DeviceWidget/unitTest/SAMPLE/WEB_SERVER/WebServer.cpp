@@ -1,5 +1,7 @@
 #include <HelloApplication.h>
 
+using namespace Wt;
+
 WApplication *createApplication(const WEnvironment& env)
 {
   return new HelloApplication(env);

@@ -14,15 +14,33 @@
 #include <Wt/WSound>
 #include <Wt/Http/Client>
 
-#include <DeviceWidget.h>
+#include <boost/noncopyable.hpp>
+#include <boost/thread.hpp>
+#include <set>
+#include <map>
+
+#include "DeviceWidget.h"
+
+using namespace std; 
+using namespace Wt;
 
 class ServerWidget : public Wt::WContainerWidget
 {
 public:
 	ServerWidget(Wt::WContainerWidget *parent = 0);
 
+	bool loggedIn() const;
+
+
+	void addDeviceWidget(struct device& device);
+    void renderDeviceWidget();
+
+
 private:
-	DeviceWidget *devWidget;
+	bool loggedIn_;
+
+	WContainerWidget* wcDevice_;
+    DeviceWidgetMap devMap_;
 };
 
 #endif

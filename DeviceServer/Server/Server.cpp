@@ -16,109 +16,72 @@ Server::Server(WServer& server)
   : server_(server)
 { 
   server_.addResource(devServer_.deviceWResource(), "/resource");
-  devServer_.clientEventSig().connect(SLOT(this, Server::postClientEvent));
+  devServer_.deviceEventSig().connect(SLOT(this, Server::postDeviceEvent));
 }
 
 bool Server::connect(Client *client,
 			       const ClientEventCallback& handleEvent)
 {
-  boost::recursive_mutex::scoped_lock lock(mutex_);
+    boost::recursive_mutex::scoped_lock lock(mutex_);
 
-  if (clients_.count(client) == 0) {
-    ClientInfo clientInfo;
+    if (clients_.count(client) == 0)
+    {
+        ClientInfo clientInfo;
   
-    clientInfo.sessionId = WApplication::instance()->sessionId();
-    clientInfo.eventCallback = handleEvent;
+        clientInfo.sessionId = WApplication::instance()->sessionId();
+        clientInfo.eventCallback = handleEvent;
 
-    clients_[client] = clientInfo;
+        clients_[client] = clientInfo;
 
-    return true;
-  } else
-    return false;
+        return true;
+    } else
+        return false;
 }
 
 bool Server::disconnect(Client *client)
 {
-  boost::recursive_mutex::scoped_lock lock(mutex_);
+    boost::recursive_mutex::scoped_lock lock(mutex_);
 
-  return clients_.erase(client) == 1;
+    return clients_.erase(client) == 1;
 }
 
 bool Server::login(const WString& user)
 {
-  boost::recursive_mutex::scoped_lock lock(mutex_);
+    boost::recursive_mutex::scoped_lock lock(mutex_);
   
-  if (users_.find(user) == users_.end()) {
-    users_.insert(user);
+    if (users_.find(user) == users_.end())
+    {
+        users_.insert(user);
 
-    postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(WebEvent::Login, user)));
+        postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(WebEvent::Login, user)));
 
-    return true;
+        return true;
   } else
-    return false;
+        return false;
 }
 
 void Server::logout(const WString& user)
 {
-  boost::recursive_mutex::scoped_lock lock(mutex_);
+    boost::recursive_mutex::scoped_lock lock(mutex_);
 
-  UserSet::iterator i = users_.find(user);
+    UserSet::iterator i = users_.find(user);
 
-  if (i != users_.end()) {
-    users_.erase(i);
-
-    postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(WebEvent::Logout, user)));
-  }
-}
-
-bool Server::changeName(const WString& user, const WString& newUser)
-{
-  if (user == newUser)
-    return true;
-
-  boost::recursive_mutex::scoped_lock lock(mutex_);
-  
-  UserSet::iterator i = users_.find(user);
-
-  if (i != users_.end()) {
-    if (users_.count(newUser) == 0) {
-      users_.erase(i);
-      users_.insert(newUser);
-
-      postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(WebEvent::Rename, user, newUser)));
-
-      return true;
-    } else
-      return false;
-  } else
-    return false;
-}
-
-WString Server::suggestGuest()
-{
-  boost::recursive_mutex::scoped_lock lock(mutex_);
-
-  for (int i = 1;; ++i) {
-    std::string s = "guest " + boost::lexical_cast<std::string>(i);
-    WString ss = s;
-
-    if (users_.find(ss) == users_.end())
-      return ss;
-  }
-}
-
-void Server::sendMessage(const WString& user, const WString& message)
-{
-  postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(user, message)));
+    if (i != users_.end())
+    {
+        users_.erase(i);
+        postClientEvent(ClientEvent(ClientEvent::Type::User, WebEvent(WebEvent::Logout, user)));
+    }
 }
 
 void Server::postClientEvent(const ClientEvent& event)
 {
-  boost::recursive_mutex::scoped_lock lock(mutex_);
+    std::cout << "**************************" << std::endl;
+    std::cout << "postClientEvent" << std::endl;
+    boost::recursive_mutex::scoped_lock lock(mutex_);
 
-  WApplication *app = WApplication::instance();
+    WApplication *app = WApplication::instance();
 
-  for (ClientMap::const_iterator i = clients_.begin(); i != clients_.end();
+    for (ClientMap::const_iterator i = clients_.begin(); i != clients_.end();
        ++i) {
     /*
      * If the user corresponds to the current application, we directly
@@ -140,10 +103,38 @@ void Server::postClientEvent(const ClientEvent& event)
 
 Server::UserSet Server::users()
 {
-  boost::recursive_mutex::scoped_lock lock(mutex_);
+    boost::recursive_mutex::scoped_lock lock(mutex_);
 
-  UserSet result = users_;
+    UserSet result = users_;
 
-  return result;
+    return result;
 }
 
+void Server::postDeviceEvent(const DeviceEvent& event)
+{
+    std::cout << "**************************" << std::endl;
+    cout << "postDeviceEvent: " << endl;
+    Devices::DeviceMap devMap = devServer_.deviceMap();
+
+    for (Devices::DeviceMap::const_iterator it = devMap.begin();
+        it != devMap.end(); ++it)
+    {
+        std::cout << "**************************" << std::endl;
+        cout << "postDeviceEvent: " << it->first << endl;
+    }
+
+    DeviceEvent::Type type = event.type();
+    struct device device = event.device();
+
+    switch (type)
+    {
+        case DeviceEvent::Type::Attach:
+        {
+            postClientEvent(ClientEvent(ClientEvent::Type::Device,
+                                        DeviceEvent(DeviceEvent::Type::Attach, device)));
+            break;
+        }
+        default:
+            break;
+    }
+}

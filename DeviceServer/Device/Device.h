@@ -1,5 +1,5 @@
-#ifndef DEVICE_H_
-#define DEVICE_H_
+#ifndef DEVICE_H
+#define DEVICE_H
 
 #include <Wt/Json/Object>
 #include <Wt/Json/Parser>
@@ -10,8 +10,8 @@
 #include <boost/thread.hpp>
 #include <set>
 #include <map>
-#include <string.h>
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 using namespace Wt;
@@ -27,13 +27,17 @@ struct device {
 	device_type type;
 };
 
+
 class Device
 {
 public:
-	Device(struct device device)
-	{}
-	Device()
-	{}
+    Device()
+    {}
+
+    Device(struct device device)
+    {
+        device_ = device;
+    }
 	
 	bool connect(struct device device);
 	
@@ -46,7 +50,24 @@ public:
 	void setValue(const WString value) { device_.value = value; }
 
 private:
-	struct device device_;
+    struct device device_;
+};
+
+class Devices
+{
+public:
+
+    bool insertDevice(struct device device);
+    bool eraseDevice(struct device device);
+
+	typedef map<string, struct device> DeviceMap;
+	DeviceMap deviceMap() const { return devices_; }
+
+private:
+	DeviceMap devices_;
+	boost::recursive_mutex mutex_;
+
+	friend class DeviceServer;	
 };
 
 class DeviceEvent
@@ -55,6 +76,8 @@ public:
 	DeviceEvent()
 	{}
 
+	// device => Connect => DeviceServer[DeviceMap(insert)] => Attach => ServerSide
+	// ServerSide => Deatach => Disconnect => DeviceServer[DeviceMap(erase)]
 	enum Type { Connect, Disconnect, Attach, Deatach};
 	Type type() const { return type_; }
 	
@@ -72,12 +95,12 @@ public:
 	struct device device() const { return device_; }
 
 private:
-  Type type_;
-  struct device device_;
+	Type type_;
+  	struct device device_;
 
 	friend class Server;
 };
 
 typedef boost::function<void (const DeviceEvent&)> DeviceEventCallback;
 
-#endif	//	DEVICE_H_
+#endif	//	DEVICE_H

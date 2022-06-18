@@ -12,8 +12,8 @@
 #include <Wt/WText>
 #include <Wt/WTimer>
 
-#include "Server.h"
-
+#include <Server.h>
+#include <ServerWidget.h>
 
 using namespace Wt;
 
@@ -24,34 +24,31 @@ using namespace Wt;
 
 /*! \brief A chat demo application.
  */
-class ServerAppication : public WApplication
+class ServerAppication : public WApplication 
 {
-public:
+  public:
   /*! \brief Create a new instance.
    */
-  ServerAppication(const WEnvironment& env, Server& server);
-
-private:
-  Server& server_;
-
+    ServerAppication(const WEnvironment& env, Server& server);
+  private:
+    Server& server_;
+    ServerWidget* serverWidget;
 };
 
 ServerAppication::ServerAppication(const WEnvironment& env,
-				 Server& server)
-  : WApplication(env),
-    server_(server)
-{
+    Server& server)
+  : WApplication(env), server_(server) {
   setTitle("Wt Chat");
 
   root()->addWidget(new WText(WString::tr("introduction")));
+    serverWidget = new ServerWidget(server_, root());
 
 }
 
 
 
 
-WApplication *createApplication(const WEnvironment& env,
-				Server& server)
+WApplication *createApplication(const WEnvironment& env, Server& server)
 {
   return new ServerAppication(env, server);
 }
@@ -66,7 +63,7 @@ int main(int argc, char **argv)
    * and one for a widget that can be integrated in another page.
    */
   server.addEntryPoint(Wt::Application,
-		       boost::bind(createApplication, _1,
+           boost::bind(createApplication, _1,
 				   boost::ref(chatServer)));
 
   if (server.start()) {

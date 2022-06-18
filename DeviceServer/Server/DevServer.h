@@ -1,18 +1,21 @@
-#ifndef DEVSERVER_H_
-#define DEVSERVER_H_
+#ifndef DEVSERVER_H
+#define DEVSERVER_H
 
-#include <boost/noncopyable.hpp>
 
 #include <Wt/WSignal>
 #include <Wt/WString>
 #include <ClientEvent.h>
 
+#include <boost/noncopyable.hpp>
+#include <boost/thread.hpp>
 #include <set>
 #include <map>
-#include <boost/thread.hpp>
 
 #include <Device.h>
 #include <DeviceWResource.h>
+
+class DeviceWResource;
+class DeviceEvent;
 
 class DeviceServer
 {
@@ -23,21 +26,20 @@ public:
 	void connect(const DeviceEvent &event);
 
 	// Emit Signal to update widget
-	Wt::Signal<ClientEvent>& clientEventSig() { return clientEventSig_; }
+    Wt::Signal<DeviceEvent>& deviceEventSig() { return deviceEventSig_; }
 
-	void emitClientEventSig(const ClientEvent &event)
+    void emitDeviceEventSig(const DeviceEvent &event)
 	{
-		clientEventSig_.emit(event);
+        deviceEventSig_.emit(event);
 	}
 
-	// DeviceMap
-	typedef map<string, struct device> DeviceMap;
-	DeviceMap deviceMap();
+	Devices::DeviceMap deviceMap();
 
 private:
 	DeviceWResource *deviceWR_;
-	DeviceMap deviceMap_;
-	Wt::Signal<ClientEvent> clientEventSig_;
+	Devices devices_;
+
+    Wt::Signal<DeviceEvent> deviceEventSig_;
 
     // System
     boost::recursive_mutex mutex_;

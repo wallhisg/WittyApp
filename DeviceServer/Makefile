@@ -46,6 +46,8 @@ include $(PRJ_BASE)/Makefile.inc
 include $(PRJ_BASE)/Makefile.bas
 include $(PRJ_BASE)/Makefile.env
 
+MAKEFLAGS += "-j$(NUM_CORES) -l$(NUM_CORES)
+
 .PHONY: all build clean checkdirs test run
 
 #======================================================================
@@ -58,5 +60,5 @@ MV	:= mf -f
 #======================================================================
 
 test:
-	@echo	01. $(PRJ_OBJ)
+	@echo	01. $(PRJ_BUILD_DIR)
 

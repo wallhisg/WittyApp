@@ -23,7 +23,7 @@ public:
 	~DeviceWResource();
 
 	// Trigger when device connect
-    Wt::Signal<DeviceEvent>& devEventSig() { return devConEventSig_; }
+    Wt::Signal<DeviceEvent>& devConEventSig() { return devConEventSig_; }
 
     void emitDeviceConEventSig(const DeviceEvent &event)
     {

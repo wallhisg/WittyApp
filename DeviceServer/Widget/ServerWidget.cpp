@@ -4,8 +4,6 @@
  * See the LICENSE file for terms of use.
  */
 
-#include "ServerWidget.h"
-#include "Server.h"
 
 #include <Wt/WApplication>
 #include <Wt/WContainerWidget>
@@ -23,34 +21,41 @@
 
 #include <iostream>
 
+#include "ServerWidget.h"
+#include "Server.h"
+
 using namespace Wt;
 
 ServerWidget::ServerWidget(Server& server,
 				   Wt::WContainerWidget *parent)
   : WContainerWidget(parent),
     server_(server),
-    loggedIn_(false)
+    loggedIn_(true)
 {
-  letLogin();
+    std::cout << "**************************" << std::endl;
+    std::cout << "ServerWidget::ServerWidget" << std::endl;
+
+    letLogin();
+
 }
 
 ServerWidget::~ServerWidget()
 {
 
-  logout();
+    logout();
 }
 
 void ServerWidget::connect()
 {
-  if (server_.connect
-      (this, boost::bind(&ServerWidget::processClientEvent, this, _1)))
-    Wt::WApplication::instance()->enableUpdates(true);
+    if (server_.connect
+            (this, boost::bind(&ServerWidget::processClientEvent, this, _1)))
+        Wt::WApplication::instance()->enableUpdates(true);
 }
 
 void ServerWidget::disconnect()
 {
-  if (server_.disconnect(this))
-    Wt::WApplication::instance()->enableUpdates(false);
+    if (server_.disconnect(this))
+        Wt::WApplication::instance()->enableUpdates(false);
 }
 
 void ServerWidget::letLogin()
@@ -62,9 +67,50 @@ void ServerWidget::letLogin()
 
 void ServerWidget::login()
 {
-  if (!loggedIn()) {
+    loggedIn_ = true;
+    loggedIn();
 
-  }
+}
+
+void ServerWidget::loggedIn()
+{
+    startServer();
+}
+
+void ServerWidget::startServer()
+{
+    connect();
+
+    if (loggedIn_)
+    {
+        // create WContainerWidget for devices
+        wcDevice_ = new WContainerWidget();
+        wcDevice_->setOverflow(WContainerWidget::OverflowAuto);
+
+        // create device widget from Device server
+        std::cout << "**************************" << std::endl;
+        cout << "ServerWidget::startServer" << endl;
+        Devices::DeviceMap devMap = server_.deviceMap();
+
+        for (Devices::DeviceMap::const_iterator it = devMap.begin();
+            it != devMap.end(); ++it)
+        {
+            std::cout << "**************************" << std::endl;
+            cout << "postDeviceEvent: " << it->first << endl;
+            struct device device = it->second;
+            DeviceWidget *devWidget = new DeviceWidget(device, this);
+            // this->addWidget(devWidget);
+        }
+
+        createClientLayout();
+    }
+
+
+    if (!wcDevice_->parent())
+    {
+        delete  wcDevice_;
+        wcDevice_ = 0;
+    }
 }
 
 void ServerWidget::logout()
@@ -72,86 +118,33 @@ void ServerWidget::logout()
     disconnect();
 }
 
-void ServerWidget::createLayout(WWidget *messages, WWidget *userList,
-				    WWidget *messageEdit,
-				    WWidget *sendButton, WWidget *logoutButton)
+void ServerWidget::createClientLayout()
 {
-  /*
-   * Create a vertical layout, which will hold 3 rows,
-   * organized like this:
-   *
-   * WVBoxLayout
-   * --------------------------------------------
-   * | nested WHBoxLayout (vertical stretch=1)  |
-   * |                              |           |
-   * |  messages                    | userList  |
-   * |   (horizontal stretch=1)     |           |
-   * |                              |           |
-   * --------------------------------------------
-   * | message edit area                        |
-   * --------------------------------------------
-   * | WHBoxLayout                              |
-   * | send | logout                            |
-   * --------------------------------------------
-   */
-  WVBoxLayout *vLayout = new WVBoxLayout();
 
-  // Create a horizontal layout for the messages | userslist.
-  WHBoxLayout *hLayout = new WHBoxLayout();
-
-  // Add widget to horizontal layout with stretch = 1
-  hLayout->addWidget(messages, 1);
-  messages->setStyleClass("chat-msgs");
-
-    // Add another widget to horizontal layout with stretch = 0
-  hLayout->addWidget(userList);
-  userList->setStyleClass("chat-users");
-
-  hLayout->setResizable(0, true);
-
-  // Add nested layout to vertical layout with stretch = 1
-  vLayout->addLayout(hLayout, 1);
-
-  // Add widget to vertical layout with stretch = 0
-  vLayout->addWidget(messageEdit);
-  messageEdit->setStyleClass("chat-noedit");
-
-  // Create a horizontal layout for the buttons.
-  hLayout = new WHBoxLayout();
-
-  // Add button to horizontal layout with stretch = 0
-  hLayout->addWidget(sendButton);
-
-  // Add button to horizontal layout with stretch = 0
-  hLayout->addWidget(logoutButton);
-
-  // Add nested layout to vertical layout with stretch = 0
-  vLayout->addLayout(hLayout, 0, AlignLeft);
-
-  setLayout(vLayout);
 }
+
+void ServerWidget::createDeviceWidget()
+{
+    
+}
+
+void ServerWidget::createDeviceWidget(struct device &device)
+{
+    DeviceWidget *devWidget = new DeviceWidget(device, this);
+}
+
+void ServerWidget::createDeviceLayout() {
+}
+
+
 
 bool ServerWidget::loggedIn() const
 {
-  return loggedIn_;
+    return loggedIn_;
 }
 
-
-bool ServerWidget::startChat(const WString& user)
-{
-  /*
-   * When logging in, we pass our processClientEvent method as the function that
-   * is used to indicate a new chat event for this user.
-   */
-
-    connect();
-
-    return true;
-}
-
-void ServerWidget::processClientEvent(const ClientEvent& event)
-{
-
+void ServerWidget::processClientEvent(const ClientEvent& event) {
+    
     switch (event.type())
     {
         case ClientEvent::Type::User:
@@ -161,7 +154,7 @@ void ServerWidget::processClientEvent(const ClientEvent& event)
         }
         case ClientEvent::Type::Device:
         {
-            processDevicecEvent(event.devEvent());
+            processDeviceEvent(event.devEvent());
             break;
         }
         default:
@@ -171,31 +164,16 @@ void ServerWidget::processClientEvent(const ClientEvent& event)
 
 void ServerWidget::processWebEvent(const WebEvent& event)
 {
-  WApplication *app = WApplication::instance();
-
-  /*
-   * This is where the "server-push" happens. The chat server posts to this
-   * event from other sessions, see Server::postClientEvent()
-   */
-
-  /*
-   * Format and append the line to the conversation.
-   *
-   * This is also the step where the automatic XSS filtering will kick in:
-   * - if another user tried to pass on some JavaScript, it is filtered away.
-   * - if another user did not provide valid XHTML, the text is automatically
-   *   interpreted as PlainText
-   */
-
-  /*
-   * If it is not a plain message, also update the user list.
-   */
-  if (event.type() != WebEvent::Message) {
-    if (event.type() == WebEvent::Rename && event.user() == user_)
-      user_ = event.data();
+    WApplication *app = WApplication::instance();
 
 
-  }
+    if (event.type() != WebEvent::Message)
+    {
+        if (event.type() == WebEvent::Rename && event.user() == user_)
+            user_ = event.data();
+
+
+    }
 
   /*
    * This is the server call: we (schedule to) propagate the updated UI to
@@ -203,17 +181,21 @@ void ServerWidget::processWebEvent(const WebEvent& event)
    *
    * This schedules an update and returns immediately
    */
-  app->triggerUpdate();
+    app->triggerUpdate();
 
 }
 
-void ServerWidget::processDevicecEvent(const DeviceEvent& event)
+void ServerWidget::processDeviceEvent(const DeviceEvent& event)
 {
     std::cout << "**************************" << std::endl;
-    std::cout << "processDevicecEvent" << std::endl;
+    std::cout << "processDeviceEvent" << std::endl;
+    std::cout << "processDeviceEvent" << std::endl;
+
     struct device device;
     device = event.device();
 
-        
+    createDeviceWidget(device);
+
 
 }
+

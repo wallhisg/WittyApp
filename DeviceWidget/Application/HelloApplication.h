@@ -5,7 +5,7 @@
 #include <Wt/WPushButton>
 #include <Wt/WText>
 
-#include <Server.h>
+#include <ServerWidget.h>
 
 using namespace Wt;
 
