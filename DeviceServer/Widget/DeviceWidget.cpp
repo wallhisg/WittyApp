@@ -11,16 +11,16 @@ void DeviceWidget::createWidget(struct device& device)
 {
     device_ = &device;
 
-    id = new WText(device_->id);
-    ip = new WText(device_->ip);
-    name_ = new WText(device_->name);
+    id_ = new WText(device_->id);
+    ip_ = new WText(device_->ip);
+    name_ = new WText(device_->name + " = " + device_->value);
     WPushButton *control = new WPushButton(device_->name);
 
     control->clicked().connect(
         boost::bind(&DeviceWidget::processWidgetEvent, this,
                     WWidgetEvent(WWidgetEvent::Type::Button, device)));
 
-    createLayout(id, ip, name_, control);
+    createLayout(id_, ip_, name_, control);
 }
 
 /*
@@ -53,34 +53,6 @@ void DeviceWidget::createLayout(WWidget *id, WWidget *ip,
 void DeviceWidget::setDeviceLayout(WContainerWidget *wcDevice)
 {
     wcDevice->setLayout(vLayout);
-}
-
-void DeviceWidget::processWidgetEvent(const WWidgetEvent &event)
-{
-
-    struct device device_ = event.device();
-    switch (event.type())
-    {
-
-        case WWidgetEvent::Type::Button:
-        {
-            std::cout << "**************************" << std::endl;
-            std::cout << "WWidgetEvent" << std::endl;
-            std::cout << "device_.id: " << device_.id <<std::endl;
-            std::cout << "device_.ip: " << device_.ip <<std::endl;
-            std::cout << "device_.name: " << device_.name <<std::endl;
-            std::cout << "device_.type: " << device_.type <<std::endl;
-
-            break;
-        }
-        case WWidgetEvent::Type::Slider:
-        {
-
-            break;
-        }
-        default:
-            break;
-    }
 }
 
 DeviceWidgetMap::WidgetMap DeviceWidgetMap::widgetMap()
@@ -129,5 +101,44 @@ DeviceWidget* DeviceWidgetMap::getWidget(const string &id)
     {
         cout << "Key \"" << id << "\" not found" << endl;
         return nullptr;
+    }
+}
+
+void DeviceWidget::processWidgetEvent(const WWidgetEvent &event)
+{
+
+    struct device device_ = event.device();
+    switch (event.type())
+    {
+
+        case WWidgetEvent::Type::Button:
+        {
+            std::cout << "**************************" << std::endl;
+            std::cout << "WWidgetEvent" << std::endl;
+            std::cout << "device_.id: " << device_.id <<std::endl;
+            std::cout << "device_.ip: " << device_.ip <<std::endl;
+            std::cout << "device_.name: " << device_.name <<std::endl;
+            std::cout << "device_.type: " << device_.type <<std::endl;
+
+            struct device device = event.device();
+
+            if (device.value == "0")
+            {
+                device.value = "1";
+            }
+            else
+            {
+
+            }
+
+            break;
+        }
+        case WWidgetEvent::Type::Slider:
+        {
+
+            break;
+        }
+        default:
+            break;
     }
 }

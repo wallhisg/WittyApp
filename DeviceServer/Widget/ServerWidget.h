@@ -58,8 +58,7 @@ public:
     const Wt::WString& userName() const { return user_; }
 
     void createClientLayout();
-    void createDeviceWidget();
-    void createDeviceWidget(struct device& device);
+    void renderDeviceWidget();
     void createDeviceLayout();
 
 protected:
@@ -68,22 +67,21 @@ protected:
     bool loggedIn() const;
 
 private:
+    // Server
+    Server&     server_;
+
     typedef std::map<Wt::WString, bool> UserMap;
     UserMap users_;
 
-    
-    // Device map 
-    DeviceWidgetMap deviceMap_;
-
     // Device Widget
     WContainerWidget* wcDevice_;
-    DeviceWidgetMap deviceWidgetMap_;
-    // Server
-    Server&     server_;
+    DeviceWidgetMap deviceMap_;
     bool    loggedIn_;
 
     Wt::WString user_;
 
+    void createDeviceWidget(struct device& device);
+    void createDeviceWidget();
 
     /* called from another session */
     void processClientEvent(const ClientEvent& event);

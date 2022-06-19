@@ -112,8 +112,7 @@ Server::UserSet Server::users()
 
 void Server::postDeviceEvent(const DeviceEvent& event)
 {
-    std::cout << "**************************" << std::endl;
-    cout << "postDeviceEvent: " << endl;
+
     Devices::DeviceMap devMap = devServer_.deviceMap();
 
     for (Devices::DeviceMap::const_iterator it = devMap.begin();

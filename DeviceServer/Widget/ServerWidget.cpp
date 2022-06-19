@@ -86,23 +86,12 @@ void ServerWidget::startServer()
         // create WContainerWidget for devices
         wcDevice_ = new WContainerWidget();
         wcDevice_->setOverflow(WContainerWidget::OverflowAuto);
+        this->addWidget(wcDevice_);
 
-        // create device widget from Device server
-        std::cout << "**************************" << std::endl;
-        cout << "ServerWidget::startServer" << endl;
-        Devices::DeviceMap devMap = server_.deviceMap();
-
-        for (Devices::DeviceMap::const_iterator it = devMap.begin();
-            it != devMap.end(); ++it)
-        {
-            std::cout << "**************************" << std::endl;
-            cout << "postDeviceEvent: " << it->first << endl;
-            struct device device = it->second;
-            DeviceWidget *devWidget = new DeviceWidget(device, this);
-            // this->addWidget(devWidget);
-        }
-
-        createClientLayout();
+        // create device widget from Device server and add to device widget map
+        createDeviceWidget();
+        renderDeviceWidget();
+ 
     }
 
 
@@ -118,19 +107,54 @@ void ServerWidget::logout()
     disconnect();
 }
 
-void ServerWidget::createClientLayout()
-{
-
-}
-
 void ServerWidget::createDeviceWidget()
 {
-    
+    Devices::DeviceMap devMap = server_.deviceMap();
+    if (devMap.size() > 0)
+    {
+
+        struct device device;
+
+        for (Devices::DeviceMap::const_iterator it = devMap.begin();
+            it != devMap.end(); ++it)
+        {
+            device = it->second;
+
+            WContainerWidget *wcDevice = new WContainerWidget();
+            DeviceWidget *devWidget = new DeviceWidget(device, wcDevice);
+
+            // Add to DeviceWidgetMap
+            deviceMap_.insertDeviceWidget(devWidget);
+
+        }
+    }
 }
 
 void ServerWidget::createDeviceWidget(struct device &device)
 {
-    DeviceWidget *devWidget = new DeviceWidget(device, this);
+
+}
+
+void ServerWidget::renderDeviceWidget()
+{
+    DeviceWidgetMap::WidgetMap wgMap = deviceMap_.widgetMap();
+
+    if (wgMap.size() > 0)
+    {
+        for (DeviceWidgetMap::WidgetMap::const_iterator it = wgMap.begin();
+            it != wgMap.end(); ++it)
+        {
+            DeviceWidget *devWidget;
+
+            devWidget = it->second;
+            wcDevice_->addWidget(devWidget);
+        }
+    }
+}
+
+void ServerWidget::createClientLayout()
+{
+
 }
 
 void ServerWidget::createDeviceLayout() {
@@ -143,8 +167,10 @@ bool ServerWidget::loggedIn() const
     return loggedIn_;
 }
 
-void ServerWidget::processClientEvent(const ClientEvent& event) {
-    
+void ServerWidget::processClientEvent(const ClientEvent& event) 
+{
+    std::cout << "**************************" << std::endl;
+    std::cout << "processClientEvent" << std::endl;    
     switch (event.type())
     {
         case ClientEvent::Type::User:
@@ -189,12 +215,18 @@ void ServerWidget::processDeviceEvent(const DeviceEvent& event)
 {
     std::cout << "**************************" << std::endl;
     std::cout << "processDeviceEvent" << std::endl;
-    std::cout << "processDeviceEvent" << std::endl;
 
     struct device device;
     device = event.device();
 
-    createDeviceWidget(device);
+    WApplication *app = WApplication::instance();
+
+    WContainerWidget *wcDevice = new WContainerWidget();
+    DeviceWidget *devWidget = new DeviceWidget(device, wcDevice);
+    deviceMap_.insertDeviceWidget(devWidget);
+    wcDevice_->addWidget(wcDevice);
+    
+    app->triggerUpdate();
 
 
 }

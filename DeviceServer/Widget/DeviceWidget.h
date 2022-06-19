@@ -58,10 +58,6 @@ class WWidgetEvent {
 class DeviceWidget : public WContainerWidget 
 {
  public:
-    DeviceWidget(WContainerWidget *parent)
-        : WContainerWidget(parent) 
-    {}
-
     DeviceWidget(struct device& device, WContainerWidget *parent)
         :   WContainerWidget(parent),
             device_(&device)
@@ -69,11 +65,6 @@ class DeviceWidget : public WContainerWidget
         createWidget(device);
     }
 
-    DeviceWidget(struct device& device)
-        :   device_(&device)
-    {
-        createWidget(device);
-    }
     ~DeviceWidget()
     {}
 
@@ -89,8 +80,8 @@ class DeviceWidget : public WContainerWidget
 private:
     struct device *device_;
     WVBoxLayout *vLayout;
-    WText *id;
-    WText *ip;
+    WText *id_;
+    WText *ip_;
     WText *name_;
 };
 
