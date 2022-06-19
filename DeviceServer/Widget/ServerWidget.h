@@ -82,6 +82,7 @@ private:
 
     void createDeviceWidget(struct device& device);
     void createDeviceWidget();
+    void processDeviceWidgetEvent(const DeviceWidgetEvent &event);
 
     /* called from another session */
     void processClientEvent(const ClientEvent& event);

@@ -121,8 +121,11 @@ void ServerWidget::createDeviceWidget()
             device = it->second;
 
             WContainerWidget *wcDevice = new WContainerWidget();
-            DeviceWidget *devWidget = new DeviceWidget(device, wcDevice);
+            DeviceWidget *devWidget = new DeviceWidget(it->second, wcDevice);
 
+            devWidget->deviceWidgetEventSig().connect(SLOT(
+                this, ServerWidget::processDeviceWidgetEvent));
+            
             // Add to DeviceWidgetMap
             deviceMap_.insertDeviceWidget(devWidget);
 
@@ -134,6 +137,19 @@ void ServerWidget::createDeviceWidget(struct device &device)
 {
 
 }
+
+
+// Put event handler here
+void ServerWidget::processDeviceWidgetEvent(const DeviceWidgetEvent &event)
+{
+    std::cout << "**************************" << std::endl;
+    std::cout << "processDeviceWidgetEvent" << std::endl;
+
+    struct device device = event.device();
+
+    DeviceWidget *devWidget = deviceMap_.getWidget(device.id.toUTF8());
+}
+
 
 void ServerWidget::renderDeviceWidget()
 {
@@ -216,18 +232,19 @@ void ServerWidget::processDeviceEvent(const DeviceEvent& event)
     std::cout << "**************************" << std::endl;
     std::cout << "processDeviceEvent" << std::endl;
 
-    struct device device;
-    device = event.device();
-
     WApplication *app = WApplication::instance();
+    
+    struct device device = event.device();
+
+
 
     WContainerWidget *wcDevice = new WContainerWidget();
     DeviceWidget *devWidget = new DeviceWidget(device, wcDevice);
-    deviceMap_.insertDeviceWidget(devWidget);
     wcDevice_->addWidget(wcDevice);
     
+    // Add to DeviceWidgetMap    
+    deviceMap_.insertDeviceWidget(devWidget);
+
     app->triggerUpdate();
-
-
 }
 

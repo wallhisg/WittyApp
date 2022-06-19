@@ -30,9 +30,9 @@ using namespace std;
 
 class DeviceWidget;
 
-class WWidgetEvent {
+class DeviceWidgetEvent {
  public:
-    enum Type { Button, Slider };
+    enum Type { changeName, changeValue };
     Type type() const { return type_; }
 
     struct device device() const { return device_; }
@@ -41,13 +41,13 @@ class WWidgetEvent {
     struct device device_;
     DeviceWidget *deviceWidget_;
 
-    WWidgetEvent(Type type, struct device device)
+    DeviceWidgetEvent(Type type, struct device device)
         :	type_(type)
     {
         device_ = device;
     }
 
-    WWidgetEvent(Type type, DeviceWidget *deviceWidget)
+    DeviceWidgetEvent(Type type, DeviceWidget *deviceWidget)
         :	type_(type),
             deviceWidget_(deviceWidget)
     {}
@@ -58,31 +58,44 @@ class WWidgetEvent {
 class DeviceWidget : public WContainerWidget 
 {
  public:
-    DeviceWidget(struct device& device, WContainerWidget *parent)
+    DeviceWidget(const struct device& device, WContainerWidget *parent)
         :   WContainerWidget(parent),
-            device_(&device)
+            device_(device)
     {
-        createWidget(device);
+        createWidget();
     }
 
     ~DeviceWidget()
     {}
 
-    void changeName(WString name);
-    const string getId() const { return device_->id.toUTF8(); }
+    // Signal trigger when control clicked
+    Wt::Signal<DeviceWidgetEvent>& deviceWidgetEventSig() { return deviceWidgetEventSig_; }
 
-    void createWidget(struct device& device);
+
+    void changeName(WString name);
+    void changeValue(struct device device);
+
+    const string getId() const { return device_.id.toUTF8(); }
+
+    void createWidget();
     void createLayout(WWidget *id, WWidget *ip, WWidget *name, WWidget *control);
     void setDeviceLayout(WContainerWidget *wcDevice);
-    void processWidgetEvent(const WWidgetEvent &event);
+    void processWidgetEvent(const DeviceWidgetEvent &event);
 
 
 private:
-    struct device *device_;
-    WVBoxLayout *vLayout;
+    const struct device &device_;
+
+    WPushButton *control_;
     WText *id_;
     WText *ip_;
     WText *name_;
+
+    Wt::Signal<DeviceWidgetEvent> deviceWidgetEventSig_;
+    void emitDeviceConEventSig(const DeviceWidgetEvent &event)
+    {
+        deviceWidgetEventSig_.emit(event);
+    }
 };
 
 class DeviceWidgetMap : boost::noncopyable

@@ -3,24 +3,29 @@
 
 void DeviceWidget::changeName(WString name)
 {
-    device_->name = name;
-    name_->setText(name);
+    // device_.name = name;
+    // name_->setText(name);
 }
 
-void DeviceWidget::createWidget(struct device& device)
+void DeviceWidget::changeValue(struct device device)
 {
-    device_ = &device;
 
-    id_ = new WText(device_->id);
-    ip_ = new WText(device_->ip);
-    name_ = new WText(device_->name + " = " + device_->value);
-    WPushButton *control = new WPushButton(device_->name);
+    control_->setText(device.value);
+}
 
-    control->clicked().connect(
+void DeviceWidget::createWidget()
+{
+
+    id_ = new WText(device_.id);
+    ip_ = new WText(device_.ip);
+    name_ = new WText(device_.name + " = " + device_.value);
+    control_ = new WPushButton(device_.name);
+
+    control_->clicked().connect(
         boost::bind(&DeviceWidget::processWidgetEvent, this,
-                    WWidgetEvent(WWidgetEvent::Type::Button, device)));
+                    DeviceWidgetEvent(DeviceWidgetEvent::Type::changeValue, device_)));
 
-    createLayout(id_, ip_, name_, control);
+    createLayout(id_, ip_, name_, control_);
 }
 
 /*
@@ -48,11 +53,6 @@ void DeviceWidget::createLayout(WWidget *id, WWidget *ip,
     vLayout->addWidget(name);
     vLayout->addWidget(control);
     this->setLayout(vLayout);
-}
-
-void DeviceWidget::setDeviceLayout(WContainerWidget *wcDevice)
-{
-    wcDevice->setLayout(vLayout);
 }
 
 DeviceWidgetMap::WidgetMap DeviceWidgetMap::widgetMap()
@@ -104,36 +104,42 @@ DeviceWidget* DeviceWidgetMap::getWidget(const string &id)
     }
 }
 
-void DeviceWidget::processWidgetEvent(const WWidgetEvent &event)
+void DeviceWidget::processWidgetEvent(const DeviceWidgetEvent &event)
 {
-
+    std::cout << "**************************" << std::endl;
+    std::cout << "processWidgetEvent" << std::endl;
     struct device device_ = event.device();
     switch (event.type())
     {
 
-        case WWidgetEvent::Type::Button:
+        case DeviceWidgetEvent::Type::changeValue:
         {
             std::cout << "**************************" << std::endl;
-            std::cout << "WWidgetEvent" << std::endl;
+            std::cout << "DeviceWidgetEvent" << std::endl;
             std::cout << "device_.id: " << device_.id <<std::endl;
             std::cout << "device_.ip: " << device_.ip <<std::endl;
             std::cout << "device_.name: " << device_.name <<std::endl;
+            std::cout << "device_.value: " << device_.value <<std::endl;
             std::cout << "device_.type: " << device_.type <<std::endl;
+
 
             struct device device = event.device();
 
             if (device.value == "0")
             {
                 device.value = "1";
+                control_->setText(device.value);
             }
             else
             {
-
+                device.value = "0";
+                control_->setText(device.value);
             }
-
+            emitDeviceConEventSig(DeviceWidgetEvent(DeviceWidgetEvent::Type::changeValue,
+                                                    device));
             break;
         }
-        case WWidgetEvent::Type::Slider:
+        case DeviceWidgetEvent::Type::changeName:
         {
 
             break;
