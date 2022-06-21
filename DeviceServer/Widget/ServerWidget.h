@@ -13,7 +13,8 @@
 #include <Wt/WSound>
 
 #include <Device.h>
-#include <Server.h>
+#include <WebServer.h>
+#include <DeviceServer.h>
 #include <DeviceWidget.h>
 
 namespace Wt {
@@ -26,18 +27,13 @@ namespace Wt {
 
 class ClientEvent;
 
-/**
- * \defgroup chatexample Chat example
- */
-/*@{*/
-
-/*! \brief A self-contained device widget.
- */
 class ServerWidget : public Wt::WContainerWidget,
-			 public Server::Client
+			 public WebServer::Client
 {
 public:
-    ServerWidget(Server& server, Wt::WContainerWidget *parent = 0);
+    ServerWidget(WebServer& server, 
+                    DeviceServer& deviceServer, 
+                    Wt::WContainerWidget *parent = 0);
 
     ~ServerWidget();
 
@@ -51,7 +47,7 @@ public:
 
     void logout();
 
-    Server& server() { return server_; }
+    WebServer& server() { return webServer_; }
 
     int userCount() { return users_.size(); }
 
@@ -62,29 +58,29 @@ public:
     void createDeviceLayout();
 
 protected:
-
-protected:
     bool loggedIn() const;
 
 private:
-    // Server
-    Server&     server_;
+    // Server manager
+    WebServer& webServer_;
+    DeviceServer& deviceServer_;
 
+    //  User manager
     typedef std::map<Wt::WString, bool> UserMap;
     UserMap users_;
-
-    // Device Widget
-    WContainerWidget* wcDevice_;
-    DeviceWidgetMap deviceMap_;
     bool    loggedIn_;
-
     Wt::WString user_;
+
+    //  Device Widget manager
+    WContainerWidget* wcDevice_;
+    DeviceWidgetMap deviceWidgetMap_;
 
     void createDeviceWidget(struct device& device);
     void createDeviceWidget();
     void processDeviceWidgetEvent(const DeviceWidgetEvent &event);
 
-    /* called from another session */
+    /*  Events handler
+        called from another session */
     void processClientEvent(const ClientEvent& event);
     void processWebEvent(const WebEvent& event);
     void processDeviceEvent(const DeviceEvent& event);

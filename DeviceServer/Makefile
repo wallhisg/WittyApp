@@ -42,10 +42,14 @@ export	BF_NOT_BUILD	:=	3
 export	BF_BUILD		:=	4
 export	BF_TEST			:=	5
 
+export	RESOURCES_DIR	:=	
+
 include $(PRJ_BASE)/Makefile.inc
 include $(PRJ_BASE)/Makefile.bas
 include $(PRJ_BASE)/Makefile.env
 
+# resources-dir
+# Make build multi
 MAKEFLAGS += "-j$(NUM_CORES) -l$(NUM_CORES)
 
 .PHONY: all build clean checkdirs test run
@@ -60,5 +64,5 @@ MV	:= mf -f
 #======================================================================
 
 test:
-	@echo	01. $(PRJ_BUILD_DIR)
+	@echo	$(PRJ_OBJ)
 

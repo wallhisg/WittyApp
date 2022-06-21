@@ -4,7 +4,6 @@
  * See the LICENSE file for terms of use.
  */
 
-
 #include <Wt/WApplication>
 #include <Wt/WContainerWidget>
 #include <Wt/WEnvironment>
@@ -22,39 +21,45 @@
 #include <iostream>
 
 #include "ServerWidget.h"
-#include "Server.h"
+#include "WebServer.h"
 
 using namespace Wt;
 
-ServerWidget::ServerWidget(Server& server,
-				   Wt::WContainerWidget *parent)
+ServerWidget::ServerWidget(WebServer& server,
+                            DeviceServer& deviceServer, 
+				            Wt::WContainerWidget *parent)
   : WContainerWidget(parent),
-    server_(server),
+    webServer_(server),
+    deviceServer_(deviceServer),
     loggedIn_(true)
 {
     std::cout << "**************************" << std::endl;
     std::cout << "ServerWidget::ServerWidget" << std::endl;
 
     letLogin();
-
 }
 
 ServerWidget::~ServerWidget()
 {
-
     logout();
 }
 
 void ServerWidget::connect()
 {
-    if (server_.connect
-            (this, boost::bind(&ServerWidget::processClientEvent, this, _1)))
+    if (webServer_.connect(this, 
+                    boost::bind(&ServerWidget::processClientEvent, this, _1)))
+    {
+        deviceServer_.connect(this, 
+                    boost::bind(&ServerWidget::processDeviceEvent, this, _1));
+
         Wt::WApplication::instance()->enableUpdates(true);
+    }
+
 }
 
 void ServerWidget::disconnect()
 {
-    if (server_.disconnect(this))
+    if (webServer_.disconnect(this))
         Wt::WApplication::instance()->enableUpdates(false);
 }
 
@@ -62,7 +67,6 @@ void ServerWidget::letLogin()
 {
     clear();
     login();
-
 }
 
 void ServerWidget::login()
@@ -109,7 +113,7 @@ void ServerWidget::logout()
 
 void ServerWidget::createDeviceWidget()
 {
-    Devices::DeviceMap devMap = server_.deviceMap();
+    Devices::DeviceMap devMap = deviceServer_.deviceMap();
     if (devMap.size() > 0)
     {
 
@@ -121,13 +125,14 @@ void ServerWidget::createDeviceWidget()
             device = it->second;
 
             WContainerWidget *wcDevice = new WContainerWidget();
-            DeviceWidget *devWidget = new DeviceWidget(it->second, wcDevice);
+            DeviceWidget *devWidget = new DeviceWidget(device, wcDevice);
 
+            // Connect device widget event to wiget event handler
             devWidget->deviceWidgetEventSig().connect(SLOT(
                 this, ServerWidget::processDeviceWidgetEvent));
             
             // Add to DeviceWidgetMap
-            deviceMap_.insertDeviceWidget(devWidget);
+            deviceWidgetMap_.insertDeviceWidget(devWidget);
 
         }
     }
@@ -142,18 +147,32 @@ void ServerWidget::createDeviceWidget(struct device &device)
 // Put event handler here
 void ServerWidget::processDeviceWidgetEvent(const DeviceWidgetEvent &event)
 {
-    std::cout << "**************************" << std::endl;
-    std::cout << "processDeviceWidgetEvent" << std::endl;
 
+    DeviceWidgetEvent::Type type = event.type();
     struct device device = event.device();
 
-    DeviceWidget *devWidget = deviceMap_.getWidget(device.id.toUTF8());
+    std::cout << "**************************" << std::endl;
+    std::cout << "processDeviceWidgetEvent" << std::endl;
+    std::cout << "device.value: " << device.value <<std::endl;
+
+    switch (type)
+    {
+        case DeviceWidgetEvent::Type::ChangeValue:
+        {
+            deviceServer_.changeValue(device);
+            break;
+        }
+        default:
+            break;
+
+    }
+
 }
 
 
 void ServerWidget::renderDeviceWidget()
 {
-    DeviceWidgetMap::WidgetMap wgMap = deviceMap_.widgetMap();
+    DeviceWidgetMap::WidgetMap wgMap = deviceWidgetMap_.widgetMap();
 
     if (wgMap.size() > 0)
     {
@@ -213,8 +232,6 @@ void ServerWidget::processWebEvent(const WebEvent& event)
     {
         if (event.type() == WebEvent::Rename && event.user() == user_)
             user_ = event.data();
-
-
     }
 
   /*
@@ -224,7 +241,6 @@ void ServerWidget::processWebEvent(const WebEvent& event)
    * This schedules an update and returns immediately
    */
     app->triggerUpdate();
-
 }
 
 void ServerWidget::processDeviceEvent(const DeviceEvent& event)
@@ -234,16 +250,36 @@ void ServerWidget::processDeviceEvent(const DeviceEvent& event)
 
     WApplication *app = WApplication::instance();
     
+    DeviceEvent::Type type = event.type();
     struct device device = event.device();
 
+    // process current sessionid
+    switch (type)
+    {
+        case DeviceEvent::Type::Connect:
+        {
+            // create device widget
+            WContainerWidget *wcDevice = new WContainerWidget();
+            DeviceWidget *devWidget = new DeviceWidget(device, wcDevice);
+            wcDevice_->addWidget(wcDevice);
+            
+            // Add to DeviceWidgetMap    
+            deviceWidgetMap_.insertDeviceWidget(devWidget);
+            break;
+        }
+        case  DeviceEvent::Type::ChangeValue: 
+        {
+            DeviceWidget *deviceWidget = deviceWidgetMap_.getWidget(device.id.toUTF8());
 
+            // process other sessionid
+            if (deviceWidget != nullptr)
+                deviceWidget->changeValue(device);
+            break;
+        }
+        default:
+            break;
+    }
 
-    WContainerWidget *wcDevice = new WContainerWidget();
-    DeviceWidget *devWidget = new DeviceWidget(device, wcDevice);
-    wcDevice_->addWidget(wcDevice);
-    
-    // Add to DeviceWidgetMap    
-    deviceMap_.insertDeviceWidget(devWidget);
 
     app->triggerUpdate();
 }

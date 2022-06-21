@@ -32,7 +32,7 @@ class DeviceWidget;
 
 class DeviceWidgetEvent {
  public:
-    enum Type { changeName, changeValue };
+    enum Type { ChangeName, ChangeValue };
     Type type() const { return type_; }
 
     struct device device() const { return device_; }
@@ -58,7 +58,7 @@ class DeviceWidgetEvent {
 class DeviceWidget : public WContainerWidget 
 {
  public:
-    DeviceWidget(const struct device& device, WContainerWidget *parent)
+    DeviceWidget(struct device device, WContainerWidget *parent)
         :   WContainerWidget(parent),
             device_(device)
     {
@@ -73,7 +73,7 @@ class DeviceWidget : public WContainerWidget
 
 
     void changeName(WString name);
-    void changeValue(struct device device);
+    void changeValue(struct device& device);
 
     const string getId() const { return device_.id.toUTF8(); }
 
@@ -84,7 +84,7 @@ class DeviceWidget : public WContainerWidget
 
 
 private:
-    const struct device &device_;
+    struct device device_;
 
     WPushButton *control_;
     WText *id_;
@@ -92,7 +92,7 @@ private:
     WText *name_;
 
     Wt::Signal<DeviceWidgetEvent> deviceWidgetEventSig_;
-    void emitDeviceConEventSig(const DeviceWidgetEvent &event)
+    void emitDeviceWidgetEventSig(const DeviceWidgetEvent &event)
     {
         deviceWidgetEventSig_.emit(event);
     }
@@ -105,6 +105,7 @@ class DeviceWidgetMap : boost::noncopyable
     bool eraseDeviceWidget(DeviceWidget *deviceWidget);
 
     DeviceWidget* getWidget(const string& id);
+    DeviceWidget* getWidget(const WString& id);
 
     typedef map<string, DeviceWidget *>  WidgetMap;
     WidgetMap widgetMap();

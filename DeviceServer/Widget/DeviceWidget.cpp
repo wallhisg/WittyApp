@@ -7,10 +7,15 @@ void DeviceWidget::changeName(WString name)
     // name_->setText(name);
 }
 
-void DeviceWidget::changeValue(struct device device)
+void DeviceWidget::changeValue(struct device& device)
 {
+    if (device.value == "1")
+        control_->setStyleClass("btn-success");
+    else
+        control_->setStyleClass("btn-danger");
 
     control_->setText(device.value);
+
 }
 
 void DeviceWidget::createWidget()
@@ -19,11 +24,16 @@ void DeviceWidget::createWidget()
     id_ = new WText(device_.id);
     ip_ = new WText(device_.ip);
     name_ = new WText(device_.name + " = " + device_.value);
-    control_ = new WPushButton(device_.name);
+    control_ = new WPushButton(device_.value);
+
+    if (device_.value == "1")
+        control_->setStyleClass("btn-success");
+    else
+        control_->setStyleClass("btn-danger");
 
     control_->clicked().connect(
         boost::bind(&DeviceWidget::processWidgetEvent, this,
-                    DeviceWidgetEvent(DeviceWidgetEvent::Type::changeValue, device_)));
+                    DeviceWidgetEvent(DeviceWidgetEvent::Type::ChangeValue, device_)));
 
     createLayout(id_, ip_, name_, control_);
 }
@@ -104,15 +114,35 @@ DeviceWidget* DeviceWidgetMap::getWidget(const string &id)
     }
 }
 
+DeviceWidget* DeviceWidgetMap::getWidget(const WString &id)
+{
+    boost::recursive_mutex::scoped_lock lock(mutex_);
+
+    try {
+        string id_ = id.toUTF8();
+        DeviceWidget* deviceWidget = widgetMap_.at(id_);
+
+        return deviceWidget;
+    }
+    catch (const std::out_of_range&)
+    {
+        cout << "Key \"" << id << "\" not found" << endl;
+        return nullptr;
+    }
+}
+
 void DeviceWidget::processWidgetEvent(const DeviceWidgetEvent &event)
 {
     std::cout << "**************************" << std::endl;
     std::cout << "processWidgetEvent" << std::endl;
-    struct device device_ = event.device();
-    switch (event.type())
+    
+    DeviceWidgetEvent::Type type = event.type();
+    
+
+    switch (type)
     {
 
-        case DeviceWidgetEvent::Type::changeValue:
+        case DeviceWidgetEvent::Type::ChangeValue:
         {
             std::cout << "**************************" << std::endl;
             std::cout << "DeviceWidgetEvent" << std::endl;
@@ -123,23 +153,28 @@ void DeviceWidget::processWidgetEvent(const DeviceWidgetEvent &event)
             std::cout << "device_.type: " << device_.type <<std::endl;
 
 
-            struct device device = event.device();
-
-            if (device.value == "0")
+            WApplication *app = WApplication::instance();
+            if (device_.value == "0")
             {
-                device.value = "1";
-                control_->setText(device.value);
+                device_.value = "1";
+                control_->setText("1");
+                control_->setStyleClass("btn-success");
             }
             else
             {
-                device.value = "0";
-                control_->setText(device.value);
+                device_.value = "0";
+                control_->setText("0");
+                control_->setStyleClass("btn-danger");
             }
-            emitDeviceConEventSig(DeviceWidgetEvent(DeviceWidgetEvent::Type::changeValue,
-                                                    device));
+            std::cout << "**************************" << std::endl;
+            std::cout << "processWidgetEvent" << std::endl;
+            std::cout << "device_.value: " << device_.value <<std::endl;
+            emitDeviceWidgetEventSig(DeviceWidgetEvent(DeviceWidgetEvent::Type::ChangeValue,
+                                                    device_));
+            app->triggerUpdate();
             break;
         }
-        case DeviceWidgetEvent::Type::changeName:
+        case DeviceWidgetEvent::Type::ChangeName:
         {
 
             break;

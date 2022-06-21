@@ -24,7 +24,6 @@ void DeviceWResource::handleRequest(const Http::Request &request, Http::Response
             
             if (jsonParserDevice(*devInfo_))
             {
-
                 emitDeviceConEventSig(DeviceEvent(DeviceEvent::Type::Connect, this->device_));
             }
 

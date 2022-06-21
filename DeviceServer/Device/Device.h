@@ -58,7 +58,8 @@ class Devices
 public:
 
     bool insertDevice(struct device device);
-    bool eraseDevice(struct device device);
+    bool eraseDevice(const struct device& device);
+    void updateDevice(const struct device device);
 
 	typedef map<string, struct device> DeviceMap;
 	DeviceMap deviceMap() const { return devices_; }
@@ -78,14 +79,10 @@ public:
 
 	// device => Connect => DeviceServer[DeviceMap(insert)] => Attach => ServerSide
 	// ServerSide => Deatach => Disconnect => DeviceServer[DeviceMap(erase)]
-	enum Type { Connect, Disconnect, Attach, Deatach};
+	enum Type { Connect, Disconnect, Attach, Deatach, Update, ChangeValue};
+
 	Type type() const { return type_; }
 	
-  DeviceEvent(Type type)
-  	:	type_(type)
-	{
-	}
-
   DeviceEvent(Type type, struct device &device)
   	:	type_(type)
 	{
