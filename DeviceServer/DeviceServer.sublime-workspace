@@ -1,0 +1,770 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"get",
+				"getWcontainerDevice"
+			],
+			[
+				"wc",
+				"wcDevice_"
+			],
+			[
+				"pro",
+				"processDeviceEvent"
+			],
+			[
+				"devi",
+				"deviceServer_"
+			],
+			[
+				"de",
+				"deviceServer_"
+			],
+			[
+				"client",
+				"clients_"
+			],
+			[
+				"CLI",
+				"ClientMap"
+			],
+			[
+				"iot",
+				"iotServer"
+			],
+			[
+				"dev",
+				"deviceServer"
+			],
+			[
+				"ser",
+				"server_"
+			],
+			[
+				"Chaa",
+				"changeName"
+			],
+			[
+				"device",
+				"deviceMap_"
+			],
+			[
+				"Change",
+				"changeValue"
+			],
+			[
+				"D",
+				"DeviceWidgetEvent"
+			],
+			[
+				"sw",
+				"switch"
+			],
+			[
+				"co",
+				"const_iterator"
+			],
+			[
+				"Devi",
+				"Devices"
+			],
+			[
+				"Dev",
+				"Devices"
+			],
+			[
+				"De",
+				"Devices"
+			],
+			[
+				"d",
+				"devices_"
+			],
+			[
+				"pos",
+				"postDeviceEvent"
+			],
+			[
+				"in",
+				"include"
+			],
+			[
+				"deviceM",
+				"deviceMap_"
+			],
+			[
+				"devie",
+				"deviceMap_"
+			],
+			[
+				"Device",
+				"DeviceMap"
+			],
+			[
+				"ty",
+				"typedef"
+			],
+			[
+				"W",
+				"Wt"
+			],
+			[
+				"se",
+				"server_"
+			],
+			[
+				"WT",
+				"Wt/"
+			],
+			[
+				"WW",
+				"WWidget"
+			],
+			[
+				"WWi",
+				"WWidgetEvent"
+			],
+			[
+				"serv",
+				"server"
+			],
+			[
+				"ha",
+				"hLayout"
+			],
+			[
+				"pri",
+				"private"
+			],
+			[
+				"h",
+				"Pattern - WServer.h>"
+			],
+			[
+				"inc",
+				"include"
+			],
+			[
+				"WCon",
+				"WContainerWidget.h>"
+			],
+			[
+				"incl",
+				"include"
+			],
+			[
+				"WA",
+				"Pattern - WAnchor.h>"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "/*\n* Copyright (C) 2008 Emweb bv, Herent, Belgium.\n*\n* See the LICENSE file for terms of use.\n*/\n\n#include <Wt/WApplication>\n#include <Wt/WContainerWidget>\n#include <Wt/WEnvironment>\n#include <Wt/WPushButton>\n#include <Wt/WServer>\n#include <Wt/WText>\n#include <Wt/WTimer>\n\n#include <WebServer.h>\n#include <ServerWidget.h>\n#include <Wt/WBootstrapTheme>\n#include <Wt/WCssTheme>\n\nusing namespace Wt;\nusing namespace std;\n\nclass Server;\nclass DeviceServer;\n\nclass IoServer\n{\npublic:\n\tIoServer(WebServer& server, DeviceServer& deviceServer)\n\t\t:\tserver_(server),\n\t\tdeviceServer_(deviceServer)\n\t{}\n\n\tWebServer& getServer() { return server_; }\n\tDeviceServer& getDeviceServer() { return deviceServer_; }\n\nprivate:\n\tWebServer &server_;\n\tDeviceServer& deviceServer_;\n};\n\nclass ServerAppication : public WApplication \n{\npublic:\n\tServerAppication(const WEnvironment& env, \n\tWebServer& server,\n\tDeviceServer& deviceServer);\n\nprivate:\n\tWebServer& server_;\n\tDeviceServer& deviceServer_;\n\tServerWidget* serverWidget;\n};\n\nServerAppication::ServerAppication(const WEnvironment& env, WebServer& server, DeviceServer& deviceServer)\n\t: \tWApplication(env),\n\t\tserver_(server),\n\t\tdeviceServer_(deviceServer)\n{\n\tsetTitle(\"Device Manager\");\n\taddMetaHeader(\"viewport\", \"width=device-width, initial-scale=1, maximum-scale=1\");\n\n\tconst std::string *themePtr = env.getParameter(\"theme\");\n\tstd::string theme;\n\t\n\tif (!themePtr)\n\t\ttheme = \"bootstrap3\";\n\telse\n\t\ttheme = *themePtr;\n\n\tif (theme == \"bootstrap3\") {\n\t\tWt::WBootstrapTheme *bootstrapTheme = new Wt::WBootstrapTheme(this);\n\t\tbootstrapTheme->setVersion(Wt::WBootstrapTheme::Version3);\n\t\tbootstrapTheme->setResponsive(true);\n\t\tthis->setTheme(bootstrapTheme);\n\n\t\t// load the default bootstrap3 (sub-)theme\n\t\tthis->useStyleSheet(\"resources/themes/bootstrap/3/bootstrap-theme.min.css\");\n\t\t} else if (theme == \"bootstrap2\") {\n\t\tWt::WBootstrapTheme *bootstrapTheme = new Wt::WBootstrapTheme(this);\n\t\tbootstrapTheme->setResponsive(true);\n\t\tthis->setTheme(bootstrapTheme);\n\t} else\n\t\tthis->setTheme(new Wt::WCssTheme(theme));\t\n\n\t// load text bundles (for the tr() function)\n\tthis->messageResourceBundle().use(this->appRoot() + \"report\");\n\tthis->messageResourceBundle().use(this->appRoot() + \"text\");\n\t// this->messageResourceBundle().use(app->appRoot() + \"src\");\n\n\tserverWidget = new ServerWidget(server_, deviceServer_, root());\n}\n\nWApplication *createApplication(const WEnvironment& env, IoServer& ioServer)\n{\n\treturn new ServerAppication(env, ioServer.getServer(), ioServer.getDeviceServer());\n}\n\nint main(int argc, char **argv)\n{\n\tWt::WServer server(argc, argv, WTHTTP_CONFIGURATION);\n\tWebServer webServer(server);\n\tDeviceServer deviceServer(server);\n\n\tIoServer ioServer(webServer, deviceServer);\n\n\t/*\n\t* We add two entry points: one for the full-window application,\n\t* and one for a widget that can be integrated in another page.\n\t*/\n\tserver.addEntryPoint(Wt::Application,\n\tboost::bind(createApplication, _1,\n\tboost::ref(ioServer)));\n\n\tif (server.start()) {\n\t\tint sig = Wt::WServer::waitForShutdown();\n\t\tstd::cerr << \"Shutting down: (signal = \" << sig << \")\" << std::endl;\n\t\tserver.stop();\n\t}\n}\n\n",
+			"file": "unitTest/SAMPLE/WEB_SERVER/Server.cpp",
+			"file_size": 3286,
+			"file_write_time": 133003403778992554,
+			"settings":
+			{
+				"buffer_size": 3116,
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					65,
+					2,
+					"right_delete",
+					null,
+					"AgAAAMAGAAAAAAAAwAYAAAAAAACpAAAACQkvLyB0aGlzLT51c2VTdHlsZVNoZWV0KCIvaG9tZS93YWxsL3Byb2plY3RzL1dlYi9XaXR0eUFwcC9XaXR0eUFwcC9EZXZpY2VTZXJ2ZXIvYnVpbGQvdW5pdFRlc3QvU0FNUExFL1dFQl9TRVJWRVIvcmVzb3VyY2VzL3RoZW1lcy9ib290c3RyYXAvMy9ib290c3RyYXAtdGhlbWUubWluLmNzcyIpO8AGAAAAAAAAwAYAAAAAAAABAAAACg",
+					"AQAAAAAAAAABAAAAwAYAAAAAAABpBwAAAAAAAP///////+9/"
+				]
+			]
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/Makefile.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/User/Makefile.sublime-build",
+				"Run"
+			]
+		],
+		[
+			[
+				[
+					"Packages/Makefile/Make.sublime-build",
+					""
+				],
+				[
+					"Packages/Makefile/Make.sublime-build",
+					"Clean"
+				],
+				[
+					"Packages/User/Makefile.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Makefile.sublime-build",
+					"All"
+				],
+				[
+					"Packages/User/Makefile.sublime-build",
+					"Build"
+				],
+				[
+					"Packages/User/Makefile.sublime-build",
+					"Clean"
+				],
+				[
+					"Packages/User/Makefile.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/Makefile.sublime-build",
+					"Test"
+				]
+			],
+			[
+				"Packages/User/Makefile.sublime-build",
+				"Build"
+			]
+		],
+		[
+			[
+				[
+					"Packages/Makefile/Make.sublime-build",
+					"Clean"
+				],
+				[
+					"Packages/User/Makefile.sublime-build",
+					"Clean"
+				]
+			],
+			[
+				"Packages/Makefile/Make.sublime-build",
+				"Clean"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"laod",
+				"Session Manager: Load Session"
+			],
+			[
+				"load",
+				"Session Manager: Load Session"
+			],
+			[
+				"del",
+				"Session Manager: Delete Session"
+			],
+			[
+				"loa",
+				"Session Manager: Load Session"
+			],
+			[
+				"save",
+				"Session Manager: Save Session"
+			],
+			[
+				"l",
+				"Session Manager: Load Session"
+			],
+			[
+				"bro",
+				"Browse Mode: Outline (Right)"
+			],
+			[
+				"Load",
+				"Session Manager: Load Session"
+			],
+			[
+				"Save Se",
+				"Session Manager: Save Session"
+			],
+			[
+				"Sa",
+				"Session Manager: Save Session"
+			],
+			[
+				"SaveS",
+				"Session Manager: Save Session"
+			],
+			[
+				"la",
+				"Session Manager: Load Session"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"re",
+				"Package Control: Remove Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"EE",
+				"ECC: Settings"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"lao",
+				"Session Manager: Load Session"
+			],
+			[
+				"lod",
+				"Session Manager: Load Session"
+			],
+			[
+				"Dele",
+				"Session Manager: Delete Session"
+			],
+			[
+				"Bro",
+				"Browse Mode: Outline (Right)"
+			],
+			[
+				"Rig",
+				"Browse Mode: Outline (Right)"
+			],
+			[
+				"Brow",
+				"Browse Mode: Outline (Right)"
+			],
+			[
+				"out",
+				"Browse Mode: Outline (Right)"
+			],
+			[
+				"make",
+				"Build With: Makefile - Run"
+			],
+			[
+				"make ru",
+				"Build With: Makefile - Run"
+			],
+			[
+				"pac",
+				"Package Control: Discover Packages"
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Packages"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"INS",
+				"Install Package Control"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/approot",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/unitTest",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/unitTest/SAMPLE",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/unitTest/SAMPLE/WEB_SERVER",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Widget"
+	],
+	"file_history":
+	[
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/DeviceServer.sublime-project",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Widget/approot/text.xml",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Widget/unitTest/SAMPLE/Slider/SliderWidget.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/unitTest/SAMPLE/WEB_SERVER/Server.cpp",
+		"/home/wall/projects/Web/resources/themes/bootstrap/2/bootstrap.min.css",
+		"/home/wall/Desktop/DeviceServer/unitTest/SAMPLE/WEB_SERVER/WebServer.cpp",
+		"/home/wall/Desktop/DeviceServer/Server/DeviceServer.cpp",
+		"/home/wall/Desktop/DeviceServer/Server/DeviceServer.h",
+		"/home/wall/Desktop/DeviceServer/Server/WebServer.cpp",
+		"/home/wall/Desktop/DeviceServer/Server/WebServer.h",
+		"/home/wall/Desktop/DeviceServer/Widget/ServerWidget.cpp",
+		"/home/wall/Desktop/DeviceServer/Widget/ServerWidget.h",
+		"/usr/local/include/Wt/WGlobal",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Server/WebServer.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Widget/ServerWidget.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Widget/ServerWidget.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/unitTest/SAMPLE/WEB_SERVER/WebServer.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Server/WebServer.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Server/DeviceServer.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Server/DeviceServer.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Server/Server.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Widget/DeviceWidget.cpp",
+		"/usr/local/include/Wt/WApplication",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Feature/unitTest/SERVER_PUSH/main.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Feature/unitTest/SERVER_PUSH/PopupWidget.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Feature/Widget/PopupWidget.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Feature/Server/Server.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Feature/Widget/DeviceWidget.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Feature/Widget/DeviceWidget.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Feature/unitTest/SERVER_PUSH/PopupWidget.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Feature/unitTest/SAMPLE/WEB_SERVER/WebServer.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Client/ClientEvent.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Device/Device.h",
+		"/home/wall/projects/Web/Witty/wt3.x/wt-3.6/examples/simplechat/SimpleChatServer.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Makefile.env",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Makefile",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/C.sublime-settings",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/Widget/DeviceWidget.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/Application/HelloApplication.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/Widget/DeviceWidget.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/Server/ServerWidget.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/C.sublime-settings",
+		"/home/wall/.config/sublime-text/Packages/ClangAutoComplete/ClangAutoComplete.sublime-settings",
+		"/home/wall/.config/sublime-text/Packages/User/ClangAutoComplete.sublime-settings",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/list_folder.txt",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/DeviceWidget.cflags",
+		"/home/wall/.config/sublime-text/Packages/User/EasyClangComplete.sublime-settings",
+		"/home/wall/.config/sublime-text/Packages/EasyClangComplete/EasyClangComplete.sublime-settings",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/EasyClangComplete.sublime-project",
+		"/home/wall/.config/sublime-text/Packages/User/Default (Linux).sublime-keymap",
+		"/home/wall/.config/sublime-text/Packages/Default/Default (Linux).sublime-keymap",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/build/unitTest/SAMPLE/WEB_SERVER/DeviceWidget.ccs",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/Makefile.inc",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/unitTest/SAMPLE/WEB_SERVER/WebServer.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/Makefile.env",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceWidget/Application/HelloApplication.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/DeviceServer/Client/ClientEvent.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Log.md",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Client/Makefile",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Client/ClientEvent.h",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Server/Server.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Widget/ServerWidget.cpp",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Widget/ServerWidget.h",
+		"/home/wall/.config/sublime-text/Packages/User/SublimeCodeIntel.sublime-settings",
+		"/home/wall/.config/sublime-text/Packages/SublimeCodeIntel/SublimeCodeIntel.sublime-settings",
+		"/home/wall/projects/Demo/DongAUni/WebServer/src/Server.cpp",
+		"/home/wall/projects/Demo/DongAUni/WebServer/src/main.cpp",
+		"/home/wall/projects/Demo/DongAUni/WebServer/src/ServerWidget.cpp",
+		"/home/wall/projects/Demo/DongAUni/WebServer/src/ServerWidget.h",
+		"/home/wall/projects/Demo/DongAUni/WebServer/src/JsonServer.h",
+		"/home/wall/projects/Demo/DongAUni/WebServer/src/Server.h",
+		"/home/wall/projects/Demo/DongAUni/WebServer/src/ClientDevice/sEvent.h",
+		"/home/wall/projects/Web/Witty/wt4.x/wt-4.7.2/examples/simplechat/SimpleChatServer.h",
+		"/home/wall/projects/Web/Witty/wt4.x/wt-4.7.2/examples/simplechat/SimpleChatServer.C",
+		"/home/wall/projects/Web/Witty/wt4.x/wt-4.7.2/examples/simplechat/SimpleChatWidget.C",
+		"/home/wall/projects/Web/Witty/wt4.x/wt-4.7.2/examples/simplechat/SimpleChatWidget.h",
+		"/usr/include/boost/bind.hpp",
+		"/home/wall/projects/Demo/DongAUni/WtWeb/C.sublime-settings",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/Application/HelloApplication.cpp",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/Makefile.inc",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/Makefile.env",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/unitTest/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/unitTest/SAMPLE/WEB_SERVER_02/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/unitTest/SAMPLE/WEB_SERVER_01/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/unitTest/SAMPLE/WEB_SERVER_01/WS_Hello.cpp",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/Application/HelloApplication.h",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/Application/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/Wt-4.7.2/StopTarget.sh",
+		"/home/wall/projects/IoT_2021/IoT/edk/Makefile.env",
+		"/home/wall/projects/IoT_2021/IoT/edk/sample/timer/timer_led.c",
+		"/home/wall/projects/IoT_2021/IoT/edk/Makefile",
+		"/home/wall/projects/IoT_2021/IoT/edk/Makefile.bas",
+		"/home/wall/projects/IoT_2021/IoT/edk/device/char_dev.h",
+		"/home/wall/projects/IoT_2021/IoT/edk/Makefile.inc",
+		"/home/wall/projects/IoT_2021/IoT/edk/include/Makefile",
+		"/home/wall/projects/IoT_2021/IoT/edk/device/Makefile",
+		"/home/wall/projects/IoT_2021/IoT/edk/kernel/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/unitTest/WEBSERVER/WEBSERVER_01/sample_01.c",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/package/json/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/build/package/json/json.deps",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/package/json/json.h",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/package/json/json.cpp",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/package/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/unitTest/WEBSERVER/WEBSERVER_01/sample_01.h",
+		"/home/wall/.config/sublime-text/Packages/User/Makefile.sublime-settings",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/Makefile.env",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/core/list.h",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/Makefile.inc",
+		"/home/wall/.config/sublime-text/Packages/User/Makefile.sublime-build",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/unitTest/SAMPLE/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/Makefile.bas",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/Makefile.edk",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/core/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/include/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/include/dev/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/package/json/rpc/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/package/kalman/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/unitTest/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/unitTest/SAMPLE/SAMPLE_01/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/PM/edk/unitTest/SAMPLE/SAMPLE_02/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/wt-4.7.2/device/char_dev.h",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/wt-4.7.2/unitTest/SAMPLE/Makefile",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/wt-4.7.2/Makefile.bas",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/wt-4.7.2/Makefile.edk",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/wt-4.7.2/Makefile.env",
+		"/home/wall/projects/generic/TempleC/Makefile/Wt/wt-4.7.2/Makefile.inc"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 101.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "unitTest/SAMPLE/WEB_SERVER/Server.cpp",
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3116,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								96,
+								96
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 39.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
+	"output.exec":
+	{
+		"height": 318.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "DeviceServer.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Sev",
+				"Widget/ServerWidget.cpp"
+			],
+			[
+				"deviceW",
+				"Widget/DeviceWidget.h"
+			],
+			[
+				"ser",
+				"Widget/ServerWidget.cpp"
+			],
+			[
+				"we",
+				"Server/WebServer.cpp"
+			],
+			[
+				"de",
+				"Server/DeviceServer.cpp"
+			],
+			[
+				"De",
+				"Server/DevServer.cpp"
+			],
+			[
+				"Sere",
+				"Server/Server.cpp"
+			],
+			[
+				"Server",
+				"Server/Server.cpp"
+			],
+			[
+				"serv",
+				"Server/Server.cpp"
+			],
+			[
+				"Serv",
+				"Server/Server.cpp"
+			],
+			[
+				"Devi",
+				"Device/Device.h"
+			],
+			[
+				"",
+				"~/.config/sublime-text/Packages/User/Makefile.sublime-build"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 310.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+		"max_columns": 2
+	}
+}
