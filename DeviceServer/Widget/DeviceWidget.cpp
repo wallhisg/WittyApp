@@ -10,11 +10,17 @@ void DeviceWidget::changeName(WString name)
 void DeviceWidget::changeValue(struct device& device)
 {
     if (device.value == "1")
+    {
         control_->setStyleClass("btn-success");
+        control_->setText("ON");
+    }
     else
+    {
         control_->setStyleClass("btn-danger");
+        control_->setText("OFF");
+    }
 
-    control_->setText(device.value);
+    // control_->setText(device.value);
 
 }
 
@@ -27,9 +33,15 @@ void DeviceWidget::createWidget()
     control_ = new WPushButton(device_.value);
 
     if (device_.value == "1")
+    {
         control_->setStyleClass("btn-success");
+        control_->setText("ON");
+    }
     else
+    {
         control_->setStyleClass("btn-danger");
+        control_->setText("OFF");
+    }
 
     control_->clicked().connect(
         boost::bind(&DeviceWidget::processWidgetEvent, this,
