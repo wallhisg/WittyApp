@@ -1,0 +1,12 @@
+#head {
+  width: 100%;
+  overflow: auto;
+}
+
+.banner {
+  width: 100%;
+  background-color: aqua;
+  float: right;
+  box-sizing: border-box;
+  padding: 30px;
+}

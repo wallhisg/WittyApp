@@ -1,0 +1,14 @@
+{
+	"header_to_source_mapping": 
+	[
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/unitTest",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/unitTest/MainLayout",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/unitTest/BorderLayout",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/unitTest/Template",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/unitTest/LayoutWTable",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/approot",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/Layout",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/Layout/LayoutWTable",
+	],
+}
