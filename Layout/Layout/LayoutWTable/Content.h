@@ -11,18 +11,30 @@ using namespace Wt;
 class ContentLayout  : public WTable
 {
 public:
-	// Content 00
-	void addContentWidget_At00(WWidget *widget);
-	void setContentLenghtPercentage_At00(const unsigned char &per);
-	void setContentAlignment_At00(Wt::AlignmentFlag alignment);
-	void setContentPadding_At00(const unsigned short &pad);
-	// Content 01
-	void addContentWidget_At01(WWidget *widget);
-	void setContentLenghtPercentage_At01(const unsigned char &per);
-	void setContentAlignment_At01(Wt::AlignmentFlag alignment);
-	void setContentPadding_At01(const unsigned short &pad);
-private:
+	ContentLayout()
+		:	currRow_(0),
+			currCol_(0)
+	{}
 
+	void setRow(const unsigned short row) { currRow_ = row; }
+	void setColumn(const unsigned short col) { currCol_ = col; }
+
+	unsigned short getRow() const { return currRow_; }
+	unsigned short getCol() const { return currCol_; }
+
+	void addWidget(const unsigned short row, const unsigned short col, 
+					WWidget *widget);
+
+	void setLength(const unsigned short col, const unsigned char  per);
+
+	void setAlignment(const unsigned short row, const unsigned short col, 
+						Wt::AlignmentFlag alignment);
+	void setPadding(const unsigned short row, const unsigned short col,
+					const unsigned short pad);
+
+private:
+	unsigned short currRow_;
+	unsigned short currCol_;
 
 };
 

@@ -41,9 +41,25 @@ ServerAppication::ServerAppication(const WEnvironment& env)
 	this->messageResourceBundle().use(this->appRoot() + "text");
 	this->messageResourceBundle().use(this->appRoot() + "layout");
 
+    this->require("resources/js/jquery.min.js");
+    this->require("resources/js/index.js");
+    // this->require("resources/js/livereload.js");
+
+    this->instance()->doJavaScript("document.write('<script src=\"http://' \
+    					+ location.host.split(':')[0]	\
+    					+ ':35729/livereload.js\"></'+'script>')");
+
+    // this->instance()->doJavaScript("document.write('<script src=\"http://' \
+				// 	+ (location.host || '0.0.0.0:8080').split(':')[0]	\
+				// 	+ ':35729/livereload.js\"></'+'script>')");
+    
     this->useStyleSheet("resources/css/style.css");
-    this->require("resources/jquery.min.js");
-    this->require("resources/index.js");
+
+	// const WString div = WString::tr("chat");
+
+ //    	cout << "DIV: " << div.toUTF8() << endl;
+ //      setJavaScriptClass(div.toUTF8());
+    // setJavaScriptClass("document.write('<script src=\"http://' + location.host.split(':')[0] + ':${2:35729}/livereload.js\"></' + 'script>')");
 
 	mainLayout_ = new Wt::WVBoxLayout();
 	mainContainer_ = new Wt::WContainerWidget();
@@ -55,6 +71,7 @@ ServerAppication::ServerAppication(const WEnvironment& env)
 void ServerAppication::createUi()
 {
 	renderHeader();
+
 
 }
 

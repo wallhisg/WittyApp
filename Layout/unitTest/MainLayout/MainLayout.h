@@ -51,7 +51,7 @@ void ServerAppication::renderHeader()
 	header_->setContentAlignment_At00(AlignLeft);
 
 	// Header 01
-	WText *headerAt01 = new WText(WString::tr("headerAt01"));
+	WText *headerAt01 = new WText(WString::tr("header"));
 	header_->addHeaderWidget_At01(headerAt01);
 	header_->setContentAlignment_At01(AlignCenter);
 	

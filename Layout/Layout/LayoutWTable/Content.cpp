@@ -1,43 +1,24 @@
 #include "Content.h"
 
-// Content 00
-void ContentLayout::addContentWidget_At00(WWidget *widget)
+void ContentLayout::addWidget(const unsigned short row, const unsigned short col, 
+								WWidget *widget)
 {
-	this->elementAt(0, 0)->addWidget(widget);
+	this->elementAt(row, col)->addWidget(widget);
 }
 
-void ContentLayout::setContentLenghtPercentage_At00(const unsigned char  &per)
+void ContentLayout::setLength(const unsigned short col, const unsigned char  per)
 {
-	this->columnAt(0)->setWidth(WLength(per, WLength::Percentage));
+	this->columnAt(col)->setWidth(WLength(per, WLength::Percentage));
 }
 
-void ContentLayout::setContentAlignment_At00(Wt::AlignmentFlag alignment)
+void ContentLayout::setAlignment(const unsigned short row, const unsigned short col, 
+									Wt::AlignmentFlag alignment)
 {
-	this->elementAt(0, 0)->setContentAlignment(alignment);
+	this->elementAt(row, col)->setContentAlignment(alignment);
 }
 
-void ContentLayout::setContentPadding_At00(const unsigned short &pad)
+void ContentLayout::setPadding(const unsigned short row, const unsigned short col,
+								const unsigned short pad)
 {
-	this->elementAt(0, 0)->setPadding(pad);
-}
-
-// Content 00
-void ContentLayout::addContentWidget_At01(WWidget *widget)
-{
-	this->elementAt(0, 1)->addWidget(widget);
-}
-
-void ContentLayout::setContentLenghtPercentage_At01(const unsigned char &per)
-{
-	this->columnAt(1)->setWidth(WLength(per, WLength::Percentage));
-}
-
-void ContentLayout::setContentAlignment_At01(Wt::AlignmentFlag alignment)
-{
-	this->elementAt(0, 1)->setContentAlignment(alignment);
-}
-
-void ContentLayout::setContentPadding_At01(const unsigned short &pad)
-{
-	this->elementAt(0, 1)->setPadding(pad);
+	this->elementAt(row, col)->setPadding(pad);
 }
