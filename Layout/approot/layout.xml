@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages>
-  <message id="header">
-    <p>ĐASDASDSAẠI HỌrasdsadwedadreC ĐÔNG dsdÁ 212</p>
-    <p> 1111 AAAsKHOA asasfsdddsdsdsdf CÔNG gdfsdfsdffgNGHỆ 11 </p>
+  <message id="header.banner">
+    <p>ĐẠI HỌC ĐÔNG Á</p>
+    <p>KHOA CÔNG NGHỆ THÔNG TIN</p>
+  </message>
+  <message id="cont.left">
+    <p>THIẾT BỊ</p>
+  </message>
+  <message id="cont.cont">
+    <p>CÁC THIẾT BỊ ĐÃ KẾT NỐI</p>
   </message>
 </messages>

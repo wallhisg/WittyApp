@@ -77,6 +77,60 @@ void DeviceWidget::createLayout(WWidget *id, WWidget *ip,
     this->setLayout(vLayout);
 }
 
+void DeviceWidget::processWidgetEvent(const DeviceWidgetEvent &event)
+{
+    std::cout << "**************************" << std::endl;
+    std::cout << "processWidgetEvent" << std::endl;
+    
+    DeviceWidgetEvent::Type type = event.type();
+    
+
+    switch (type)
+    {
+
+        case DeviceWidgetEvent::Type::ChangeValue:
+        {
+            std::cout << "**************************" << std::endl;
+            std::cout << "DeviceWidgetEvent" << std::endl;
+            std::cout << "device_.id: " << device_.id <<std::endl;
+            std::cout << "device_.ip: " << device_.ip <<std::endl;
+            std::cout << "device_.name: " << device_.name <<std::endl;
+            std::cout << "device_.value: " << device_.value <<std::endl;
+            std::cout << "device_.type: " << device_.type <<std::endl;
+
+
+            WApplication *app = WApplication::instance();
+            if (device_.value == "0")
+            {
+                device_.value = "1";
+                control_->setText("1");
+                control_->setStyleClass("btn-success");
+            }
+            else
+            {
+                device_.value = "0";
+                control_->setText("0");
+                control_->setStyleClass("btn-danger");
+            }
+            std::cout << "**************************" << std::endl;
+            std::cout << "processWidgetEvent" << std::endl;
+            std::cout << "device_.value: " << device_.value <<std::endl;
+            emitDeviceWidgetEventSig(DeviceWidgetEvent(DeviceWidgetEvent::Type::ChangeValue,
+                                                    device_));
+            app->triggerUpdate();
+            break;
+        }
+        case DeviceWidgetEvent::Type::ChangeName:
+        {
+
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+
 DeviceWidgetMap::WidgetMap DeviceWidgetMap::widgetMap()
 {
     boost::recursive_mutex::scoped_lock lock(mutex_);
@@ -140,58 +194,5 @@ DeviceWidget* DeviceWidgetMap::getWidget(const WString &id)
     {
         cout << "Key \"" << id << "\" not found" << endl;
         return nullptr;
-    }
-}
-
-void DeviceWidget::processWidgetEvent(const DeviceWidgetEvent &event)
-{
-    std::cout << "**************************" << std::endl;
-    std::cout << "processWidgetEvent" << std::endl;
-    
-    DeviceWidgetEvent::Type type = event.type();
-    
-
-    switch (type)
-    {
-
-        case DeviceWidgetEvent::Type::ChangeValue:
-        {
-            std::cout << "**************************" << std::endl;
-            std::cout << "DeviceWidgetEvent" << std::endl;
-            std::cout << "device_.id: " << device_.id <<std::endl;
-            std::cout << "device_.ip: " << device_.ip <<std::endl;
-            std::cout << "device_.name: " << device_.name <<std::endl;
-            std::cout << "device_.value: " << device_.value <<std::endl;
-            std::cout << "device_.type: " << device_.type <<std::endl;
-
-
-            WApplication *app = WApplication::instance();
-            if (device_.value == "0")
-            {
-                device_.value = "1";
-                control_->setText("1");
-                control_->setStyleClass("btn-success");
-            }
-            else
-            {
-                device_.value = "0";
-                control_->setText("0");
-                control_->setStyleClass("btn-danger");
-            }
-            std::cout << "**************************" << std::endl;
-            std::cout << "processWidgetEvent" << std::endl;
-            std::cout << "device_.value: " << device_.value <<std::endl;
-            emitDeviceWidgetEventSig(DeviceWidgetEvent(DeviceWidgetEvent::Type::ChangeValue,
-                                                    device_));
-            app->triggerUpdate();
-            break;
-        }
-        case DeviceWidgetEvent::Type::ChangeName:
-        {
-
-            break;
-        }
-        default:
-            break;
     }
 }

@@ -9,6 +9,8 @@
 		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/unitTest/LayoutWTable",
 		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/approot",
 		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/Layout",
-		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/Layout/LayoutWTable",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/Layout/WTableLayout",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/Layout/TreeView",
+		"/home/wall/projects/Web/WittyApp/WittyApp/Layout/Layout/Device/TreeView",
 	],
 }
