@@ -25,8 +25,10 @@ void DeviceLayout::renderId(WWidget *id)
 void DeviceLayout::renderItems(WWidget *name, WWidget *ip, WWidget *value)
 {
 	WHBoxLayout *devItLayout = new WHBoxLayout();
+
 	WContainerWidget *wc = new WContainerWidget();
 	wc->setLayout(devItLayout);
+	wc->setStyleClass("dev-it");
 
 	devItLayout->addWidget(name);
 	devItLayout->addWidget(ip);
@@ -39,4 +41,6 @@ void DeviceLayout::renderItems(WWidget *name, WWidget *ip, WWidget *value)
 
 	wtLayout_->addWidget(newRow, newCol, wc);
 	wtLayout_->setAlignment(newRow, newCol, AlignCenter);
+	wtLayout_->setPadding(newRow, newCol, 0);
+	wtLayout_->setMargin(newRow, newCol, 0);
 }

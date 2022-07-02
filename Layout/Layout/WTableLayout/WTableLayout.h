@@ -36,6 +36,8 @@ public:
 	void setPadding(const unsigned short row, const unsigned short col,
 					const unsigned short pad);
 	void setPadding(const unsigned short pad);
+	void setMargin(const unsigned short row, const unsigned short col,
+					const unsigned short margin);
 
 	void setStyleClass(const WString &style);
 

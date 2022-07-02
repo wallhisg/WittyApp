@@ -1,0 +1,23 @@
+
+LAYOUT_LAYOUT      ?=  $(LAYOUT_BASE)/Layout
+
+__DIRECTORY_VARIABLES :=   \
+	LAYOUT_LAYOUT
+
+override LAYOUT_LAYOUT       := $(abspath $(LAYOUT_LAYOUT))
+
+# Ensure that all directories are set and don't contain spaces.
+ifneq (, $(filter-out 1, $(foreach v,$(__DIRECTORY_VARIABLES),$(words $($(v))))))
+  $(info Aborting compilation for your safety.)
+  $(info Related variables = $(__DIRECTORY_VARIABLES))
+  $(error Make sure no path override is empty or contains spaces!)
+endif
+
+# Use absolute paths in recusive "make" even if overriden on command line.
+LAYOUT_MAKEOVERRIDES 	+= $(sort $(foreach v,$(__DIRECTORY_VARIABLES),$($(v))))
+
+# include all make file
+LAYOUT_MAKEFILE   +=	$(foreach sdir, $(LAYOUT_MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
+
+include $(LAYOUT_MAKEFILE)
+    

@@ -47,3 +47,9 @@ void WTableLayout::setStyleClass(const WString &style)
 {
 	this->setStyleClass(style);
 }
+
+void WTableLayout::setMargin(const unsigned short row, const unsigned short col,
+					const unsigned short margin)
+{
+	this->elementAt(row, col)->setMargin(margin);
+}

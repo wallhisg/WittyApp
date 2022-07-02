@@ -35,6 +35,10 @@
   border: 2px solid blue;
 }
 
+.dev-it {
+  border: 2px solid blue;
+}
+
 .dev-id  {
   background-color: aqua;
   font-size: 20px;
@@ -42,15 +46,23 @@
 
 .dev-ip  {
   background-color: aqua;
+  border-top: 1px solid red;
   font-size: 20px;
+  margin-bottom: 1px;
+  margin-left: 1px;
+/*  margin-top: 1px;
+  margin-right: 1px;*/
 }
 
 .dev-name  {
   background-color: aqua;
+  border-top: 1px solid red;
   font-size: 20px;
+  margin: 1px;
 }
 
 .dev-value  {
   background-color: aqua;
-  font-size: 20px;
+  border-top: 1px solid red;
+  font-size: 10px;
 }

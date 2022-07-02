@@ -34,11 +34,12 @@ endif
 MAKEOVERRIDES 	+= $(sort $(foreach v,$(__DIRECTORY_VARIABLES),$($(v))))
 
 # include all make file
-PRJ_CLIENT_MAKEFILE 	+=	$(foreach sdir, $(MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
-SUBDIR                +=	$(foreach sdir, $(MAKEOVERRIDES), $(sdir))
+PRJ_MAKEFILE    +=	$(foreach sdir, $(MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
+SUBDIR          +=	$(foreach sdir, $(MAKEOVERRIDES), $(sdir))
 # filter-out
-SUBDIR_OUT            :=  $(PRJ_UNIT_TEST)
+SUBDIR_OUT      :=  $(PRJ_UNIT_TEST)
 # Add include
-SUBDIR_MDL            :=  $(filter-out $(SUBDIR_OUT), $(SUBDIR))
-MLD_INC               +=  $(addprefix -I,$(SUBDIR_MDL))
-include $(PRJ_CLIENT_MAKEFILE)
+SUBDIR_MDL      :=  $(filter-out $(SUBDIR_OUT), $(SUBDIR))
+
+MLD_INC         +=  $(addprefix -I,$(SUBDIR_MDL))
+include $(PRJ_MAKEFILE)

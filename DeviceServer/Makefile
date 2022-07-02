@@ -33,7 +33,7 @@ export BUILD_BASE		=	$(PRJ_BASE)/$(BUILD)
 export BUILD_PATH		=	$(PRJ_BASE)/$(BUILD)/
 export BUILD_DIR		=	$(subst $(PRJ_PATH),$(BUILD_PATH), $(MDL_PATH))
 export BUILD_TEST_DIR	=
-
+export EXTEND_BUILD_DIR	:=
 # define build flag BFLAG
 export	BF_RESERVED		:=	0
 export	BF_NOT_USE		:=	1
@@ -44,12 +44,12 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
+include $(PRJ_BASE)/Makefile.WebLayout
 include $(PRJ_BASE)/Makefile.inc
 include $(PRJ_BASE)/Makefile.bas
 include $(PRJ_BASE)/Makefile.env
 
-# resources-dir
-# Make build multi
+# Make build multi cores
 MAKEFLAGS += "-j$(NUM_CORES) -l$(NUM_CORES)
 
 .PHONY: all build clean checkdirs test run
@@ -59,10 +59,16 @@ MAKEFLAGS += "-j$(NUM_CORES) -l$(NUM_CORES)
 #======================================================================
 MKDIR	:= @mkdir -p
 RMDIR	:= @rm -rf	
-RM	:= rm -f
-MV	:= mf -f
+RM		:= @rm -f
+MV		:= @mf -f
 #======================================================================
 
 test:
-	@echo	$(APPROOT)
-
+	@echo	$(BUILD_PATH)
+	@echo	$(LAYOUT_BUILD_BASE)
+	@echo	$(LAYOUT_BUILD_PATH)
+	@echo	$(LAYOUT_DIR)
+	@echo	$(LAYOUT_OBJ)
+	@echo	$(BUILD_PATH)
+# 	@echo	$(EXTERNAL_BUILD_BASE)
+	

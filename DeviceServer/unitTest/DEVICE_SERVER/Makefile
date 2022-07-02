@@ -35,7 +35,7 @@ TARGET		:= $(shell basename $(PRJ_LOCAL_BASE))
 PROGRAM		:= $(addprefix $(PRJ_LOCAL_BASE), $(TARGET))
 PROGRAM		:= $(subst $(PRJ_PATH), $(BUILD_PATH), $(PROGRAM))
 
-$(PROGRAM): $(PRJ_SAMPLE_01_OBJ_C) $(PRJ_SAMPLE_01_OBJ_CPP)
+$(PROGRAM): $(PRJ_SAMPLE_01_OBJ_C) $(PRJ_SAMPLE_01_OBJ_CPP) $(EXTERNAL_OBJ)
 	$(CXX) $(PRJ_OBJ) $^ $(LIBS) -lstdc++ -o $@
 #----------------------------------------------------------------------------------
 include $(PRJ_BASE)/Makefile.bas

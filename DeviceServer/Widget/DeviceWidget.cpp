@@ -169,13 +169,13 @@ void DeviceWidget::processWidgetEvent(const DeviceWidgetEvent &event)
             if (device_.value == "0")
             {
                 device_.value = "1";
-                control_->setText("1");
+                control_->setText("ON");
                 control_->setStyleClass("btn-success");
             }
             else
             {
                 device_.value = "0";
-                control_->setText("0");
+                control_->setText("OFF");
                 control_->setStyleClass("btn-danger");
             }
             std::cout << "**************************" << std::endl;
