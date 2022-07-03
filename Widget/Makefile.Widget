@@ -1,0 +1,23 @@
+
+WIDGET_WIDGET      ?=  $(WIDGET_BASE)/Widget
+
+__DIRECTORY_VARIABLES :=   \
+	WIDGET_WIDGET
+
+override WIDGET_WIDGET       := $(abspath $(WIDGET_WIDGET))
+
+# Ensure that all directories are set and don't contain spaces.
+ifneq (, $(filter-out 1, $(foreach v,$(__DIRECTORY_VARIABLES),$(words $($(v))))))
+  $(info Aborting compilation for your safety.)
+  $(info Related variables = $(__DIRECTORY_VARIABLES))
+  $(error Make sure no path override is empty or contains spaces!)
+endif
+
+# Use absolute paths in recusive "make" even if overriden on command line.
+WIDGET_MAKEOVERRIDES 	+= $(sort $(foreach v,$(__DIRECTORY_VARIABLES),$($(v))))
+
+# include all make file
+WIDGET_MAKEFILE   +=	$(foreach sdir, $(WIDGET_MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
+
+include $(WIDGET_MAKEFILE)
+    

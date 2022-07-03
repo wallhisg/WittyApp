@@ -1,15 +1,15 @@
 
-PRJ_UNIT_TEST   ?=  $(PRJ_BASE)/unitTest
-PRJ_WIDGET      ?=  $(PRJ_BASE)/Widget
+WIDGET_UNIT_TEST   ?=  $(WIDGET_BASE)/unitTest
+WIDGET_WIDGET      ?=  $(WIDGET_BASE)/Widget
 
 __DIRECTORY_VARIABLES :=  \
-	PRJ_WIDGET              \
-	PRJ_UNIT_TEST			
+	WIDGET_WIDGET              \
+	WIDGET_UNIT_TEST			
 
 
-override PRJ_BASE         := $(abspath $(PRJ_BASE))
-override PRJ_UNIT_TEST    := $(abspath $(PRJ_UNIT_TEST))
-override PRJ_WIDGET       := $(abspath $(PRJ_WIDGET))
+override WIDGET_BASE         := $(abspath $(WIDGET_BASE))
+override WIDGET_UNIT_TEST    := $(abspath $(WIDGET_UNIT_TEST))
+override WIDGET_WIDGET       := $(abspath $(WIDGET_WIDGET))
 
 # Ensure that all directories are set and don't contain spaces.
 ifneq (, $(filter-out 1, $(foreach v,$(__DIRECTORY_VARIABLES),$(words $($(v))))))
@@ -22,11 +22,11 @@ endif
 MAKEOVERRIDES 	+= $(sort $(foreach v,$(__DIRECTORY_VARIABLES),$($(v))))
 
 # include all make file
-PRJ_CLIENT_MAKEFILE 	+=	$(foreach sdir, $(MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
+WIDGET_CLIENT_MAKEFILE 	+=	$(foreach sdir, $(MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
 SUBDIR                +=	$(foreach sdir, $(MAKEOVERRIDES), $(sdir))
 # filter-out
-SUBDIR_OUT            :=  $(PRJ_UNIT_TEST)
+SUBDIR_OUT            :=  $(WIDGET_UNIT_TEST)
 # Add include
 SUBDIR_MDL            :=  $(filter-out $(SUBDIR_OUT), $(SUBDIR))
 MLD_INC               +=  $(addprefix -I,$(SUBDIR_MDL))
-include $(PRJ_CLIENT_MAKEFILE)
+include $(WIDGET_CLIENT_MAKEFILE)

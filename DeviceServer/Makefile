@@ -44,7 +44,7 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
-include $(PRJ_BASE)/Makefile.WebLayout
+include $(PRJ_BASE)/Makefile.Layout
 include $(PRJ_BASE)/Makefile.inc
 include $(PRJ_BASE)/Makefile.bas
 include $(PRJ_BASE)/Makefile.env
@@ -64,11 +64,8 @@ MV		:= @mf -f
 #======================================================================
 
 test:
-	@echo	$(BUILD_PATH)
-	@echo	$(LAYOUT_BUILD_BASE)
-	@echo	$(LAYOUT_BUILD_PATH)
-	@echo	$(LAYOUT_DIR)
-	@echo	$(LAYOUT_OBJ)
-	@echo	$(BUILD_PATH)
-# 	@echo	$(EXTERNAL_BUILD_BASE)
+	@echo	$(EXTERNAL_OBJ)
+	@echo	$(EXTERNAL_BUILD_BASE)
+	@echo	$(EXTERNAL_BASE)
+
 	

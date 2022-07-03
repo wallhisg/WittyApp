@@ -4,14 +4,14 @@
 # BF_BUILD		:=	4	BF_TEST			:=	5
 BFLAG	:= $(BF_TEST)
 #----------------------------------------------------------------------------------
-PRJ_LOCAL_BASE		:= $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-PRJ_LOCAL_MDL		:= $(sort $(dir $(wildcard $(PRJ_LOCAL_BASE)*/)))
-PRJ_LOCAL_SUB_MDL	:= $(filter-out $(PRJ_LOCAL_BASE), $(PRJ_LOCAL_MDL))
-LOCAL_BUILD_DIR		:=	$(subst $(PRJ_PATH), $(BUILD_PATH), $(PRJ_LOCAL_BASE))
+WIDGET_LOCAL_BASE		:= $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+WIDGET_LOCAL_MDL		:= $(sort $(dir $(wildcard $(WIDGET_LOCAL_BASE)*/)))
+WIDGET_LOCAL_SUB_MDL	:= $(filter-out $(WIDGET_LOCAL_BASE), $(WIDGET_LOCAL_MDL))
+LOCAL_BUILD_DIR		:=	$(subst $(WIDGET_PATH), $(BUILD_PATH), $(WIDGET_LOCAL_BASE))
 #----------------------------------------------------------------------------------
-include $(PRJ_BASE)/Makefile.bas
+include $(WIDGET_BASE)/Makefile.bas
 #----------------------------------------------------------------------------------
 ifneq ($(BF_NOT_USE), $(BFLAG))
-SUBMAKEFILE	= $(foreach sdir, $(PRJ_LOCAL_SUB_MDL), $(addprefix $(sdir), Makefile))
+SUBMAKEFILE	= $(foreach sdir, $(WIDGET_LOCAL_SUB_MDL), $(addprefix $(sdir), Makefile))
 include $(SUBMAKEFILE)
 endif

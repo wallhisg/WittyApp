@@ -9,29 +9,29 @@ ifneq ($(BF_NOT_USE), $(BFLAG))
 	# BF_BUILD && BF_NOT_BUILD
 	else ifeq ($(BF_BUILD), $(BFLAG))
 		# add module path
-		MDL_PATH	+= $(PRJ_LOCAL_MDL)
+		MDL_PATH	+= $(WIDGET_LOCAL_MDL)
 		MDL_PATH	:= $(sort $(MDL_PATH))
 		# add include
 		MLD_INC		+= $(addprefix -I,$(MDL_PATH))
 		MLD_INC		:= $(sort $(MLD_INC))
 		# dep
-		PRJ_DEP		+=	$(PRJ_LOCAL_DEP)
-		PRJ_DEP		:=	$(sort $(PRJ_DEP))
+		WIDGET_DEP		+=	$(WIDGET_LOCAL_DEP)
+		WIDGET_DEP		:=	$(sort $(WIDGET_DEP))
 		# object
-		PRJ_OBJ 	+=	$(PRJ_LOCAL_OBJ_C)
-		PRJ_OBJ 	+=	$(PRJ_LOCAL_OBJ_CPP)
-		PRJ_OBJ		:=	$(sort $(PRJ_OBJ))
+		WIDGET_OBJ 	+=	$(WIDGET_LOCAL_OBJ_C)
+		WIDGET_OBJ 	+=	$(WIDGET_LOCAL_OBJ_CPP)
+		WIDGET_OBJ		:=	$(sort $(WIDGET_OBJ))
 		ifeq ($(BF_BUILD), $(BFLAG))
-			PRJ_BUILD_DIR	+=	$(LOCAL_BUILD_DIR)
-			PRJ_BUILD_DIR	:=	$(sort $(PRJ_BUILD_DIR))
+			WIDGET_BUILD_DIR	+=	$(LOCAL_BUILD_DIR)
+			WIDGET_BUILD_DIR	:=	$(sort $(WIDGET_BUILD_DIR))
 		endif
 	else ifeq ($(BF_TEST), $(BFLAG))
 		# dep
-		PRJ_DEP			+=	$(PRJ_LOCAL_DEP)
-		PRJ_DEP			:=	$(sort $(PRJ_DEP))
+		WIDGET_DEP			+=	$(WIDGET_LOCAL_DEP)
+		WIDGET_DEP			:=	$(sort $(WIDGET_DEP))
 		# build directory
-		PRJ_BUILD_DIR	+=	$(LOCAL_BUILD_DIR)
-		PRJ_BUILD_DIR	:=	$(sort $(PRJ_BUILD_DIR))
+		WIDGET_BUILD_DIR	+=	$(LOCAL_BUILD_DIR)
+		WIDGET_BUILD_DIR	:=	$(sort $(WIDGET_BUILD_DIR))
 		# programs
 		PROGRAMS		+=	$(PROGRAM)
 		PROGRAMS		:=	$(sort $(PROGRAMS))

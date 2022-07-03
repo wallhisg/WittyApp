@@ -1,19 +1,19 @@
 export ROOT_BASE		?=	$(abspath $(dir $(abspath $(dir $$PWD))))
-export PRJ_BASE			?=	$(abspath $(dir $$PWD))
-export PRJ_PATH			?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+export WIDGET_BASE			?=	$(abspath $(dir $$PWD))
+export WIDGET_PATH			?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
-export PRJ_SRC_C		:=
-export PRJ_OBJ_C		:=
-export PRJ_DEP_C		:=
+export WIDGET_SRC_C		:=
+export WIDGET_OBJ_C		:=
+export WIDGET_DEP_C		:=
 
-export PRJ_SRC_CPP		:=
-export PRJ_OBJ_CPP		:=
-export PRJ_DEP_CPP		:=
+export WIDGET_SRC_CPP		:=
+export WIDGET_OBJ_CPP		:=
+export WIDGET_DEP_CPP		:=
 
-export PRJ_OBJ			:=
-export PRJ_DEPS			:=
+export WIDGET_OBJ			:=
+export WIDGET_DEPS			:=
 
-export PRJ_LIB			:=
+export WIDGET_LIB			:=
 export EXTRA_LIB		:=
 
 export MDL_PATH			:=
@@ -29,9 +29,9 @@ export TARGET			:=
 export PROGRAMS			:=
 
 export BUILD			=	build
-export BUILD_BASE		=	$(PRJ_BASE)/$(BUILD)
-export BUILD_PATH		=	$(PRJ_BASE)/$(BUILD)/
-export BUILD_DIR		=	$(subst $(PRJ_PATH),$(BUILD_PATH), $(MDL_PATH))
+export BUILD_BASE		=	$(WIDGET_BASE)/$(BUILD)
+export BUILD_PATH		=	$(WIDGET_BASE)/$(BUILD)/
+export BUILD_DIR		=	$(subst $(WIDGET_PATH),$(BUILD_PATH), $(MDL_PATH))
 export BUILD_TEST_DIR	=
 
 # define build flag BFLAG
@@ -44,9 +44,9 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
-include $(PRJ_BASE)/Makefile.inc
-include $(PRJ_BASE)/Makefile.bas
-include $(PRJ_BASE)/Makefile.env
+include $(WIDGET_BASE)/Makefile.inc
+include $(WIDGET_BASE)/Makefile.bas
+include $(WIDGET_BASE)/Makefile.env
 
 # resources-dir
 # Make build multi
@@ -64,5 +64,5 @@ MV	:= mf -f
 #======================================================================
 
 test:
-	@echo	$(ROOT_BASE)
+	@echo	$(EXTERNAL_BASE)
 
