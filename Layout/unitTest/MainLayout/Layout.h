@@ -18,6 +18,8 @@
 
 #include <TreeView.h>
 #include <DeviceLayout.h>
+#include <Header.h>
+#include <Content.h>
 
 #include "WTableLayout.h"
 
@@ -53,28 +55,33 @@ using namespace std;
 	*********	-----------------------------------------------------
 */
 
-
-
 class Layout
 {
 public:
 	Layout(WVBoxLayout *parent);
+	~Layout() {
+		delete mainLayout_;
+		delete contentWt_;
+	}
+
 	void createUi();
 
 	void renderHeader();
+	void renderContent();
 	
-	void renderContentHead();
 	void renderDeviceId(struct device &device);
 	void renderDeviceItem(struct device &device);
 
 	void renderDeviceLayout(struct device &device);
 private:
 	WVBoxLayout *mainLayout_;
-	WVBoxLayout *hdLayout_;
-	WVBoxLayout *ctLayout_;
-	WVBoxLayout *ftLayout_;
-    WTableLayout *header_;
-    WTableLayout *content_;	
+
+	// Header
+	Wt::WImage* headerIcon;
+	WText *banner;
+	Header *header;
+	// Content
+    WTableLayout *contentWt_;
 };
 
 

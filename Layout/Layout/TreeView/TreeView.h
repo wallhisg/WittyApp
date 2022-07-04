@@ -16,18 +16,19 @@
 using namespace Wt;
 using namespace std;
 
-namespace Wt {
-	class WStandardItem;
-	class WStandardItemModel;
-	class WTreeView;
-	class WText;
-}
-
+/**
+	TODO:
+	- Remember finish ~Treeview()
+ */
 
 class TreeView : public WContainerWidget
 {
 public:
 	TreeView(WStandardItemModel *model, const WString& titleText);
+	~TreeView()
+	{
+
+	}
 
 	static WStandardItemModel *createModel(WObject *parent);
 

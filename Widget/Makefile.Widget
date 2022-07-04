@@ -1,10 +1,13 @@
 
 WIDGET_WIDGET      ?=  $(WIDGET_BASE)/Widget
+WIDGET_DEVICE      ?=  $(WIDGET_BASE)/Device
 
 __DIRECTORY_VARIABLES :=   \
-	WIDGET_WIDGET
+	WIDGET_WIDGET            \
+  WIDGET_DEVICE
 
 override WIDGET_WIDGET       := $(abspath $(WIDGET_WIDGET))
+override WIDGET_DEVICE       := $(abspath $(WIDGET_DEVICE))
 
 # Ensure that all directories are set and don't contain spaces.
 ifneq (, $(filter-out 1, $(foreach v,$(__DIRECTORY_VARIABLES),$(words $($(v))))))

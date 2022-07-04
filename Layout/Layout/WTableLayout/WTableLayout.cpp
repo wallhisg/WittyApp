@@ -1,5 +1,15 @@
 #include "WTableLayout.h"
 
+void WTableLayout::addTrWidget(WWidget *widget)
+{
+	this->elementAt(0, currCol_)->addWidget(widget);
+}
+
+void WTableLayout::addTrWidget(const unsigned short col, WWidget *widget)
+{
+	this->elementAt(0, col)->addWidget(widget);
+}
+
 void WTableLayout::addWidget(const unsigned short row, const unsigned short col, 
 								WWidget *widget)
 {

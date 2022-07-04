@@ -1,18 +1,17 @@
 
-LAYOUT_UNIT_TEST   ?=  $(LAYOUT_BASE)/unitTest
-LAYOUT_LAYOUT      ?=  $(LAYOUT_BASE)/Layout
-LAYOUT_DEVICE      ?=  $(LAYOUT_BASE)/Device
+LAYOUT_UNIT_TEST  ?=  $(LAYOUT_BASE)/unitTest
+LAYOUT_LAYOUT     ?=  $(LAYOUT_BASE)/Layout
+LAYOUT_UI         ?=  $(LAYOUT_BASE)/Ui
 
 __DIRECTORY_VARIABLES :=    \
 	LAYOUT_UNIT_TEST          \
 	LAYOUT_LAYOUT             \
-  LAYOUT_DEVICE
+  LAYOUT_UI                 
 
-
-override LAYOUT_BASE         := $(abspath $(LAYOUT_BASE))
-override LAYOUT_UNIT_TEST    := $(abspath $(LAYOUT_UNIT_TEST))
-override LAYOUT_LAYOUT       := $(abspath $(LAYOUT_LAYOUT))
-override LAYOUT_DEVICE       := $(abspath $(LAYOUT_DEVICE))
+override LAYOUT_BASE        := $(abspath $(LAYOUT_BASE))
+override LAYOUT_UNIT_TEST   := $(abspath $(LAYOUT_UNIT_TEST))
+override LAYOUT_LAYOUT      := $(abspath $(LAYOUT_LAYOUT))
+override LAYOUT_UI          := $(abspath $(LAYOUT_UI))
 
 # Ensure that all directories are set and don't contain spaces.
 ifneq (, $(filter-out 1, $(foreach v,$(__DIRECTORY_VARIABLES),$(words $($(v))))))

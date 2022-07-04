@@ -20,4 +20,3 @@ LAYOUT_MAKEOVERRIDES 	+= $(sort $(foreach v,$(__DIRECTORY_VARIABLES),$($(v))))
 LAYOUT_MAKEFILE   +=	$(foreach sdir, $(LAYOUT_MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
 
 include $(LAYOUT_MAKEFILE)
-    

@@ -60,11 +60,11 @@ MAKEFLAGS += "-j$(NUM_CORES) -l$(NUM_CORES)
 #======================================================================
 MKDIR	:= @mkdir -p
 RMDIR	:= @rm -rf	
-RM	:= rm -f
-MV	:= mf -f
+RM		:= rm -f
+MV		:= mf -f
 #======================================================================
 
 test:
-	@echo	$(BUILD_BASE)
-	@echo	$(EXTERNAL_BUILD_DIR)
+	@echo	$(WIDGET_DIR)
+	@echo	$(EXTRA_MLD_INC)
 

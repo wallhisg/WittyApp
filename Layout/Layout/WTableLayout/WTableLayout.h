@@ -1,5 +1,5 @@
-#ifndef CONTENT_H
-#define CONTENT_H
+#ifndef WTABLE_LAYOUT
+#define WTABLE_LAYOUT
 
 #include <Wt/WVBoxLayout>
 #include <Wt/WTable>
@@ -22,6 +22,8 @@ public:
 	unsigned short getRow() const { return currRow_; }
 	unsigned short getCol() const { return currCol_; }
 
+	void addTrWidget(WWidget *widget);
+	void addTrWidget(const unsigned short col, WWidget *widget);
 	void addWidget(const unsigned short row, const unsigned short col, 
 					WWidget *widget);
 	void addWidget(WWidget *widget);
@@ -47,4 +49,4 @@ private:
 
 };
 
-#endif	//	CONTENT_H
+#endif	//	WTABLE_LAYOUT
