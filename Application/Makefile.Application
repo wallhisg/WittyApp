@@ -1,0 +1,25 @@
+
+APPLICATION             ?=  $(APPLICATION_BASE)/Application
+
+__DIRECTORY_VARIABLES :=      \
+  APPLICATION
+
+override APPLICATION_BASE         := $(abspath $(APPLICATION_BASE))
+override APPLICATION_UNIT_TEST    := $(abspath $(APPLICATION_UNIT_TEST))
+override APPLICATION              := $(abspath $(APPLICATION))
+
+# Ensure that all directories are set and don't contain spaces.
+ifneq (, $(filter-out 1, $(foreach v,$(__DIRECTORY_VARIABLES),$(words $($(v))))))
+  $(info Aborting compilation for your safety.)
+  $(info Related variables = $(__DIRECTORY_VARIABLES))
+  $(error Make sure no path override is empty or contains spaces!)
+endif
+
+# Use absolute paths in recusive "make" even if overriden on command line.
+APPLICATION_MAKEOVERRIDES 	+= $(sort $(foreach v,$(__DIRECTORY_VARIABLES),$($(v))))
+
+# include all make file
+APPLICATION_MAKEFILE   +=	$(foreach sdir, $(APPLICATION_MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
+
+include $(APPLICATION_MAKEFILE)
+    
