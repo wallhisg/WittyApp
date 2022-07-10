@@ -36,6 +36,6 @@ PROGRAM		:= $(addprefix $(LAYOUT_LOCAL_BASE), $(TARGET))
 PROGRAM		:= $(subst $(LAYOUT_PATH), $(BUILD_PATH), $(PROGRAM))
 
 $(PROGRAM): $(MAINLAYOUT_OBJ_C) $(MAINLAYOUT_OBJ_CPP)
-	$(CXX) $(LAYOUT_OBJ) $^ $(LIBS) -lstdc++ -o $@
+	$(CXX) $(LAYOUT_OBJ) $(EXTERNAL_OBJ) $^ $(LIBS) -lstdc++ -o $@
 #----------------------------------------------------------------------------------
 include $(LAYOUT_BASE)/Makefile.bas

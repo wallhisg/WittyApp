@@ -59,10 +59,6 @@ class Layout
 {
 public:
 	Layout(WVBoxLayout *parent);
-	~Layout() {
-		delete mainLayout_;
-		delete contentWt_;
-	}
 
 	void createUi();
 
@@ -81,7 +77,7 @@ private:
 	WText *banner;
 	Header *header;
 	// Content
-    WTableLayout *contentWt_;
+    WTableLayout *tbl_tr_devWt_;
 };
 
 

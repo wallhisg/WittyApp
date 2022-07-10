@@ -7,27 +7,25 @@ ServerAppication::ServerAppication(const WEnvironment& env)
 	setTitle("MainLayout");
 	addMetaHeader("viewport", "width=device-width, initial-scale=1, maximum-scale=1");
 
-	const std::string *themePtr = env.getParameter("theme");
+	const std::string *themePtr_ = env.getParameter("theme");
 	std::string theme;
 	
-	if (!themePtr)
+	if (!themePtr_)
 		theme = "bootstrap3";
 	else
-		theme = *themePtr;
+		theme = *themePtr_;
 
 	if (theme == "bootstrap3") 
 	{
-		Wt::WBootstrapTheme *bootstrapTheme = new Wt::WBootstrapTheme(this);
+		bootstrapTheme = new Wt::WBootstrapTheme(this);
 		bootstrapTheme->setVersion(Wt::WBootstrapTheme::Version3);
 		bootstrapTheme->setResponsive(true);
 		this->setTheme(bootstrapTheme);
-
-		// load the default bootstrap3 (sub-)theme
 		this->useStyleSheet("resources/themes/bootstrap/3/bootstrap-theme.min.css");
 	} 
 	else if (theme == "bootstrap2") 
 	{
-		Wt::WBootstrapTheme *bootstrapTheme = new Wt::WBootstrapTheme(this);
+		bootstrapTheme = new Wt::WBootstrapTheme(this);
 		bootstrapTheme->setResponsive(true);
 		this->setTheme(bootstrapTheme);
 	} 
@@ -52,13 +50,13 @@ ServerAppication::ServerAppication(const WEnvironment& env)
 	mainContainer_->setLayout(mainLayout_);
 	root()->addWidget(mainContainer_);
 
-	Layout *layout = new Layout(mainLayout_);
+	layout_ = new Layout(mainLayout_);
 
-	layout->createUi();
+	layout_->createUi();
 
 
 }
-
+ 
 WApplication *createApplication(const WEnvironment& env)
 {
     return new ServerAppication(env);

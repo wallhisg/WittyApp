@@ -65,8 +65,6 @@ class DeviceWidget : public WContainerWidget
         createWidget();
     }
 
-    ~DeviceWidget()
-    {}
 
     // Signal trigger when control clicked
     Wt::Signal<DeviceWidgetEvent>& deviceWidgetEventSig() { return deviceWidgetEventSig_; }

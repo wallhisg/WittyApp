@@ -42,7 +42,7 @@ ServerAppication::ServerAppication(const WEnvironment& env)
 	this->messageResourceBundle().use(this->appRoot() + "layout");
 
     this->require("resources/js/jquery.min.js");
-    // this->instance()->doJavaScript("document.write('<script src=\"http://'+location.host.split(':')[0]+':35729/livereload.js\"></'+'script>')");
+    this->instance()->doJavaScript("document.write('<script src=\"http://'+location.host.split(':')[0]+':35729/livereload.js\"></'+'script>')");
 
     this->useStyleSheet("resources/css/style.css");
     this->useStyleSheet("resources/css/layout.css");

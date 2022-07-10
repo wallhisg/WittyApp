@@ -30,6 +30,9 @@ public:
 private:
     Wt::WContainerWidget *mainContainer_;
     Wt::WVBoxLayout *mainLayout_;
+
+    Wt::WBootstrapTheme *bootstrapTheme;
+    Layout *layout_;
 };
 
 

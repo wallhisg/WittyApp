@@ -44,6 +44,7 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
+# include $(PRJ_BASE)/Makefile.Widget
 include $(PRJ_BASE)/Makefile.Layout
 include $(PRJ_BASE)/Makefile.inc
 include $(PRJ_BASE)/Makefile.bas
@@ -64,7 +65,7 @@ MV		:= @mf -f
 #======================================================================
 
 test:
-	@echo	$(EXTERNAL_OBJ)
+	@echo	$(EXTERNAL_BUILD_DIR)
 	@echo	$(EXTERNAL_BUILD_BASE)
 	@echo	$(EXTERNAL_BASE)
 

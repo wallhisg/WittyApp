@@ -44,8 +44,8 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
-include $(WIDGET_BASE)/Makefile.Widget
-# include $(WIDGET_BASE)/Makefile.inc
+include $(WIDGET_BASE)/Makefile.Application
+include $(WIDGET_BASE)/Makefile.inc
 include $(WIDGET_BASE)/Makefile.bas
 include $(WIDGET_BASE)/Makefile.env
 
@@ -65,5 +65,9 @@ MV	:= mf -f
 #======================================================================
 
 test:
-	@echo	$(WIDGET_MAKEFILE)
+	@echo	$(APPLICATION_BASE)
+	@echo	$(APPLICATION_BUILD)
+	@echo	$(APPLICATION_BUILD_BASE)
+# 	@echo	$(WIDGET_BASE)
+# 	@echo	$(EXTERNAL_BUILD_DIR)
 

@@ -25,10 +25,6 @@ class TreeView : public WContainerWidget
 {
 public:
 	TreeView(WStandardItemModel *model, const WString& titleText);
-	~TreeView()
-	{
-
-	}
 
 	static WStandardItemModel *createModel(WObject *parent);
 

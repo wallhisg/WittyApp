@@ -33,21 +33,21 @@ void Layout::renderHeader()
 
 void Layout::renderContent()
 {
-	contentWt_ = new WTableLayout();
+	tbl_tr_devWt_ = new WTableLayout();
 
-	WText *contLeft = new WText(WString::tr("cont.left"));
-	contLeft->setStyleClass("table");
-	contentWt_->addWidget(0, 0, contLeft);
-	contentWt_->setLength(0, 25);
-	contentWt_->setAlignment(0, 0, AlignCenter);
+	WText *tbl_tr_devId_ = new WText(WString::tr("cont.left"));
+	tbl_tr_devId_->setStyleClass("table");
+	tbl_tr_devWt_->addWidget(0, 0, tbl_tr_devId_);
+	tbl_tr_devWt_->setLength(0, 25);
+	tbl_tr_devWt_->setAlignment(0, 0, AlignCenter);
 
-	WText *contCont = new WText(WString::tr("cont.cont"));
-	contCont->setStyleClass("table");
-	contentWt_->addWidget(0, 1, contCont);
-	contentWt_->setAlignment(0, 1, AlignCenter);
+	WText *tbl_tr_devItem_ = new WText(WString::tr("cont.cont"));
+	tbl_tr_devItem_->setStyleClass("table");
+	tbl_tr_devWt_->addWidget(0, 1, tbl_tr_devItem_);
+	tbl_tr_devWt_->setAlignment(0, 1, AlignCenter);
 
 	Content *content  = new Content();
-	content->addWTableLayout(contentWt_);
+	content->addWTableLayout(tbl_tr_devWt_);
 	mainLayout_->addLayout(content->vLayout());
 }
 
