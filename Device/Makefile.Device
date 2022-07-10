@@ -1,0 +1,23 @@
+
+DEVICE_DEVICE      ?=  $(DEVICE_BASE)/Device
+
+__DIRECTORY_VARIABLES :=   \
+  DEVICE_DEVICE
+
+override DEVICE_DEVICE       := $(abspath $(DEVICE_DEVICE))
+
+# Ensure that all directories are set and don't contain spaces.
+ifneq (, $(filter-out 1, $(foreach v,$(__DIRECTORY_VARIABLES),$(words $($(v))))))
+  $(info Aborting compilation for your safety.)
+  $(info Related variables = $(__DIRECTORY_VARIABLES))
+  $(error Make sure no path override is empty or contains spaces!)
+endif
+
+# Use absolute paths in recusive "make" even if overriden on command line.
+DEVICE_MAKEOVERRIDES 	+= $(sort $(foreach v,$(__DIRECTORY_VARIABLES),$($(v))))
+
+# include all make file
+DEVICE_MAKEFILE   +=	$(foreach sdir, $(DEVICE_MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
+
+include $(DEVICE_MAKEFILE)
+    
