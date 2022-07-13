@@ -44,8 +44,7 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
-# include $(PRJ_BASE)/Makefile.Widget
-include $(PRJ_BASE)/Makefile.Layout
+include $(PRJ_BASE)/ExtraMake/Makefile
 include $(PRJ_BASE)/Makefile.inc
 include $(PRJ_BASE)/Makefile.bas
 include $(PRJ_BASE)/Makefile.env

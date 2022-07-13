@@ -16,12 +16,10 @@
 #include <Wt/WBootstrapTheme>
 #include <Wt/WCssTheme>
 
-#include <TreeView.h>
+#include <TableLayout.h>
 #include <DeviceLayout.h>
 #include <Header.h>
-#include <Content.h>
 
-#include "WTableLayout.h"
 
 using namespace Wt;
 using namespace std;
@@ -59,6 +57,13 @@ class Layout
 {
 public:
 	Layout(WVBoxLayout *parent);
+	~Layout()
+	{
+		delete headerIcon;
+		delete banner;
+		// delete header;
+	// 	delete tbl_tr_devWt_;
+	}
 
 	void createUi();
 
@@ -77,7 +82,7 @@ private:
 	WText *banner;
 	Header *header;
 	// Content
-    WTableLayout *tbl_tr_devWt_;
+    // TableLayout *tbl_tr_devWt_;
 };
 
 

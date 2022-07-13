@@ -16,7 +16,7 @@
 #include <Wt/WBootstrapTheme>
 #include <Wt/WCssTheme>
 
-#include "WTableLayout.h"
+#include "TableLayout.h"
 
 using namespace Wt;
 using namespace std;
@@ -64,8 +64,8 @@ public:
 
 private:
 	WVBoxLayout *mainLayout_;
-    WTableLayout *header_;
-    WTableLayout *content_;	
+    TableLayout *header_;
+    TableLayout *content_;	
 };
 
 

@@ -10,24 +10,11 @@
 #include <Wt/WBootstrapTheme>
 #include <Wt/WCssTheme>
 
-#include "Application.h"
+#include "ServerApplication.h"
 
-
-void ServerAppication::InitApplication()
+void ServerAppication::WebApplication()
 {
-	this->title("Server Application");
-	addMetaHeader("viewport", "width=device-width, initial-scale=1, maximum-scale=1");
-	
-	setBootstrapTheme();
 
-	// require JavaScript
-	requireJavaScript("resources/js/jquery.min.js");
-
-	// set xml
-	setAppRoot("widget");
-
-	// setCss
-	setCss("resources/css/style.css");
 }
 
 

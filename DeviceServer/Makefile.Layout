@@ -26,3 +26,14 @@ EXTERNAL_OBJ			+= $(LAYOUT_OBJ)
 
 EXTRA_MLD_INC			+= $(addprefix -I,$(LAYOUT_DIR))
 MLD_INC					+= $(sort $(EXTRA_MLD_INC))
+
+#======================================================================
+# build external external object, deps
+#======================================================================
+$(LAYOUT_BUILD_BASE)/%.o: $(LAYOUT_BASE)/%.c
+	$(CC) $(CFLAGS) $(MLD_INC) -MM -MT $@ -MF $(patsubst %.o,%.deps,$@) $<		
+	$(CC) $(CFLAGS) $(MLD_INC) -c $< -o $@
+
+$(LAYOUT_BUILD_BASE)/%.o: $(LAYOUT_BASE)/%.cpp
+	$(CXX) $(CXXFLAGS) $(MLD_INC) -MM -MT $@ -MF $(patsubst %.o,%.deps,$@) $<
+	$(CXX) $(CXXFLAGS) $(MLD_INC) -c $< -o $@

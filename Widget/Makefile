@@ -1,19 +1,19 @@
 export ROOT_BASE		?=	$(abspath $(dir $(abspath $(dir $$PWD))))
-export WIDGET_BASE			?=	$(abspath $(dir $$PWD))
-export WIDGET_PATH			?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+export WIDGET_BASE		?=	$(abspath $(dir $$PWD))
+export WIDGET_PATH		?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 export WIDGET_SRC_C		:=
 export WIDGET_OBJ_C		:=
 export WIDGET_DEP_C		:=
 
-export WIDGET_SRC_CPP		:=
-export WIDGET_OBJ_CPP		:=
-export WIDGET_DEP_CPP		:=
+export WIDGET_SRC_CPP	:=
+export WIDGET_OBJ_CPP	:=
+export WIDGET_DEP_CPP	:=
 
-export WIDGET_OBJ			:=
-export WIDGET_DEPS			:=
+export WIDGET_OBJ		:=
+export WIDGET_DEPS		:=
 
-export WIDGET_LIB			:=
+export WIDGET_LIB		:=
 export EXTRA_LIB		:=
 
 export MDL_PATH			:=
@@ -44,7 +44,7 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
-include $(WIDGET_BASE)/Makefile.Application
+include $(WIDGET_BASE)/ExtraMake/Makefile
 include $(WIDGET_BASE)/Makefile.inc
 include $(WIDGET_BASE)/Makefile.bas
 include $(WIDGET_BASE)/Makefile.env
@@ -65,9 +65,9 @@ MV	:= mf -f
 #======================================================================
 
 test:
-	@echo	$(APPLICATION_BASE)
-	@echo	$(APPLICATION_BUILD)
+	@echo	$(EXTERNAL_OBJ)
+	@echo	$(EXTERNAL_BUILD_DIR)
 	@echo	$(APPLICATION_BUILD_BASE)
-# 	@echo	$(WIDGET_BASE)
-# 	@echo	$(EXTERNAL_BUILD_DIR)
+	@echo	$(DEVICE_DIR)
+	@echo	$(DEVICE_BUILD_DIR)
 

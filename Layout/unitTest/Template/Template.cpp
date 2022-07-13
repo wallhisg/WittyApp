@@ -1,62 +1,22 @@
-#include "Template.h"
-#include "Layout.h"
+#include <Wt/WServer>
+#include <Wt/WApplication>
+#include <Wt/WContainerWidget>
+#include <Wt/WEnvironment>
+#include <Wt/WPushButton>
+#include <Wt/WText>
+#include <Wt/WPushButton>
+#include <Wt/WSlider>
+#include <Wt/WTimer>
+#include <Wt/WBootstrapTheme>
+#include <Wt/WCssTheme>
 
-ServerAppication::ServerAppication(const WEnvironment& env)
-	: 	WApplication(env)
+#include "ServerApplication.h"
+
+void ServerAppication::WebApplication()
 {
-	setTitle("MainLayout");
-	addMetaHeader("viewport", "width=device-width, initial-scale=1, maximum-scale=1");
-
-	const std::string *themePtr = env.getParameter("theme");
-	std::string theme;
-	
-	if (!themePtr)
-		theme = "bootstrap3";
-	else
-		theme = *themePtr;
-
-	if (theme == "bootstrap3") 
-	{
-		Wt::WBootstrapTheme *bootstrapTheme = new Wt::WBootstrapTheme(this);
-		bootstrapTheme->setVersion(Wt::WBootstrapTheme::Version3);
-		bootstrapTheme->setResponsive(true);
-		this->setTheme(bootstrapTheme);
-
-		// load the default bootstrap3 (sub-)theme
-		this->useStyleSheet("resources/themes/bootstrap/3/bootstrap-theme.min.css");
-	} 
-	else if (theme == "bootstrap2") 
-	{
-		Wt::WBootstrapTheme *bootstrapTheme = new Wt::WBootstrapTheme(this);
-		bootstrapTheme->setResponsive(true);
-		this->setTheme(bootstrapTheme);
-	} 
-	else
-	{		
-		this->setTheme(new Wt::WCssTheme(theme));	
-	}
-
-	// load text bundles (for the tr() function)
-	this->messageResourceBundle().use(this->appRoot() + "report");
-	this->messageResourceBundle().use(this->appRoot() + "text");
-	this->messageResourceBundle().use(this->appRoot() + "WidgetXml");
-
-    this->useStyleSheet("resources/css/style.css");
-    this->require("resources/jquery.min.js");
-    this->require("resources/index.js");
-
-	mainLayout_ = new Wt::WVBoxLayout();
-	mainContainer_ = new Wt::WContainerWidget();
-	mainContainer_->setLayout(mainLayout_);
 
 }
 
-void ServerAppication::createUi()
-{
-
-
-	
-}
 
 WApplication *createApplication(const WEnvironment& env)
 {
@@ -65,5 +25,20 @@ WApplication *createApplication(const WEnvironment& env)
 
 int main(int argc, char **argv)
 {
-	return WRun(argc, argv, &createApplication);
+    try {
+        Wt::WServer server(argv[0]);
+        server.setServerConfiguration(argc, argv, WTHTTP_CONFIGURATION);
+        Wt::log("info")<<"Server is starting ....";
+
+        server.addEntryPoint(Wt::Application, createApplication);
+
+        if (server.start()) {
+            Wt::WServer::waitForShutdown(argv[0]);
+            server.stop();
+        }
+    } catch (Wt::WServer::Exception& e) {
+        std::cerr << e.what() << "\n";
+    } catch (std::exception& e) {
+        std::cerr << "exception: " << e.what() << "\n";
+    } return 0;
 }

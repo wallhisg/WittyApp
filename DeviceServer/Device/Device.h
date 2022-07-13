@@ -1,5 +1,5 @@
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef DEVICE_EVENT_H
+#define DEVICE_EVENT_H
 
 #include <Wt/Json/Object>
 #include <Wt/Json/Parser>
@@ -16,7 +16,6 @@
 using namespace std;
 using namespace Wt;
 
-enum device_type {BUTTON, SLIDER};
 class DeviceEvent;
 
 struct device {
@@ -24,7 +23,6 @@ struct device {
 	WString ip;
 	WString name;
 	WString value;
-	device_type type;
 };
 
 
@@ -100,4 +98,4 @@ private:
 
 typedef boost::function<void (const DeviceEvent&)> DeviceEventCallback;
 
-#endif	//	DEVICE_H
+#endif	//	DEVICE_EVENT_H

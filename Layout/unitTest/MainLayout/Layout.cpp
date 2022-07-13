@@ -12,10 +12,10 @@ Layout::Layout(WVBoxLayout *parent)
 void Layout::createUi()
 {
 	renderHeader();
-	renderContent();
+	// renderContent();
 
-	struct device dev = {"1", "BTN", "192.168.1.1", "0"};
-	renderDeviceLayout(dev);
+	// struct device dev = {"1", "BTN", "192.168.1.1", "0"};
+	// renderDeviceLayout(dev);
 }
 
 void Layout::renderHeader()
@@ -26,35 +26,35 @@ void Layout::renderHeader()
 	banner = new WText(WString::tr("header.banner"));
 	banner->setStyleClass("header-banner");
 
-	header = new Header(headerIcon, banner)	;
+	// header = new Header(headerIcon, banner)	;
 
-	mainLayout_->addLayout(header->vLayout());
+	// mainLayout_->addLayout(header->vLayout());
 }
 
 void Layout::renderContent()
 {
-	tbl_tr_devWt_ = new WTableLayout();
+	// tbl_tr_devWt_ = new TableLayout();
 
-	WText *tbl_tr_devId_ = new WText(WString::tr("cont.left"));
-	tbl_tr_devId_->setStyleClass("table");
-	tbl_tr_devWt_->addWidget(0, 0, tbl_tr_devId_);
-	tbl_tr_devWt_->setLength(0, 25);
-	tbl_tr_devWt_->setAlignment(0, 0, AlignCenter);
+	// WText *tbl_tr_devId_ = new WText(WString::tr("tbl.tr.devId"));
+	// tbl_tr_devId_->setStyleClass("table");
+	// tbl_tr_devWt_->addWidget(0, 0, tbl_tr_devId_);
+	// tbl_tr_devWt_->setLength(0, 25);
+	// tbl_tr_devWt_->setAlignment(0, 0, AlignCenter);
 
-	WText *tbl_tr_devItem_ = new WText(WString::tr("cont.cont"));
-	tbl_tr_devItem_->setStyleClass("table");
-	tbl_tr_devWt_->addWidget(0, 1, tbl_tr_devItem_);
-	tbl_tr_devWt_->setAlignment(0, 1, AlignCenter);
+	// WText *tbl_tr_devItem_ = new WText(WString::tr("tbl.tr.devItem"));
+	// tbl_tr_devItem_->setStyleClass("table");
+	// tbl_tr_devWt_->addWidget(0, 1, tbl_tr_devItem_);
+	// tbl_tr_devWt_->setAlignment(0, 1, AlignCenter);
 
-	Content *content  = new Content();
-	content->addWTableLayout(tbl_tr_devWt_);
-	mainLayout_->addLayout(content->vLayout());
+	// Content *content  = new Content();
+	// content->addTableLayout(tbl_tr_devWt_);
+	// mainLayout_->addLayout(content->vLayout());
 }
 
 void Layout::renderDeviceLayout(struct device &device)
 {
-	DeviceWidget *devWidget = new DeviceWidget(device);
-	DeviceLayout *devLayout = new DeviceLayout();
-	devLayout->renderWidget(devWidget->widget());
-	mainLayout_->addLayout(devLayout);
+	// DeviceWidget *devWidget = new DeviceWidget(device);
+	// DeviceLayout *devLayout = new DeviceLayout();
+	// devLayout->renderWidget(devWidget->widget());
+	// mainLayout_->addLayout(devLayout);
 }

@@ -4,7 +4,7 @@ PRJ_SERVER      ?=  $(PRJ_BASE)/Server
 PRJ_CLIENT      ?=  $(PRJ_BASE)/Client
 PRJ_DEVICE      ?=  $(PRJ_BASE)/Device
 PRJ_APPLICATION ?=  $(PRJ_BASE)/Application
-PRJ_WIDGET      ?=  $(PRJ_BASE)/Widget
+PRJ_WIDGET      ?=  $(PRJ_BASE)/ServerWidget
 
 __DIRECTORY_VARIABLES :=  \
  	PRJ_SERVER              \

@@ -1,10 +1,13 @@
 
-LAYOUT_LAYOUT      ?=  $(LAYOUT_BASE)/Layout
+LAYOUT_LAYOUT       ?=  $(LAYOUT_BASE)/Layout
+LAYOUT_UI           ?=  $(LAYOUT_BASE)/Ui
 
 __DIRECTORY_VARIABLES :=   \
-	LAYOUT_LAYOUT
+	LAYOUT_LAYOUT            \
+  LAYOUT_UI
 
-override LAYOUT_LAYOUT       := $(abspath $(LAYOUT_LAYOUT))
+override LAYOUT_LAYOUT        := $(abspath $(LAYOUT_LAYOUT))
+override LAYOUT_UI            := $(abspath $(LAYOUT_UI))
 
 # Ensure that all directories are set and don't contain spaces.
 ifneq (, $(filter-out 1, $(foreach v,$(__DIRECTORY_VARIABLES),$(words $($(v))))))

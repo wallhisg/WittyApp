@@ -30,8 +30,8 @@ public:
 private:
     Wt::WContainerWidget *mainContainer_;
     Wt::WVBoxLayout *mainLayout_;
-    WTableLayout *header_;
-    WTableLayout *content_;
+    TableLayout *header_;
+    TableLayout *content_;
 
 };
 

@@ -23,5 +23,17 @@ EXTERNAL_BUILD_DIR		+= $(WIDGET_BUILD_DIR)
 EXTERNAL_BUILD_BASE		+= $(WIDGET_BUILD_BASE)
 EXTERNAL_BASE			+= $(WIDGET_BASE)
 EXTERNAL_OBJ			+= $(WIDGET_OBJ)
+
 EXTRA_MLD_INC			+= $(addprefix -I,$(WIDGET_DIR))
 MLD_INC					+= $(sort $(EXTRA_MLD_INC))
+
+#======================================================================
+# build external external object, deps
+#======================================================================
+$(WIDGET_BUILD_BASE)/%.o: $(WIDGET_BASE)/%.c
+	$(CC) $(CFLAGS) $(MLD_INC) -MM -MT $@ -MF $(patsubst %.o,%.deps,$@) $<		
+	$(CC) $(CFLAGS) $(MLD_INC) -c $< -o $@
+
+$(WIDGET_BUILD_BASE)/%.o: $(WIDGET_BASE)/%.cpp
+	$(CXX) $(CXXFLAGS) $(MLD_INC) -MM -MT $@ -MF $(patsubst %.o,%.deps,$@) $<
+	$(CXX) $(CXXFLAGS) $(MLD_INC) -c $< -o $@
