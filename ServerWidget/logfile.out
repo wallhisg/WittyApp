@@ -1,0 +1,65 @@
+==35159== Memcheck, a memory error detector
+==35159== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==35159== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==35159== Command: /home/wall/projects/Web/WittyApp/WittyApp/ServerWidget/build/unitTest/TableLayoutWt/TableLayoutWt --http-address 0.0.0.0 --http-port 8080 --docroot=/home/wall/projects/Web/WittyApp/WittyApp/sources/docroot --approot=/home/wall/projects/Web/WittyApp/WittyApp/sources/approot --resources-dir=/home/wall/projects/Web/WittyApp/WittyApp/sources/resources
+==35159== Parent PID: 35158
+==35159== 
+==35159== 
+==35159== Process terminating with default action of signal 13 (SIGPIPE)
+==35159==    at 0x595DA6F: __libc_write (write.c:26)
+==35159==    by 0x595DA6F: write (write.c:24)
+==35159==    by 0x58D3F6C: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
+==35159==    by 0x58D484F: new_do_write (fileops.c:448)
+==35159==    by 0x58D484F: _IO_new_file_xsputn (fileops.c:1254)
+==35159==    by 0x58D484F: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==35159==    by 0x58C9056: fwrite (iofwrite.c:39)
+==35159==    by 0x5737B44: std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30)
+==35159==    by 0x4ECE387: operator<< <char, std::char_traits<char>, std::allocator<char> > (basic_string.h:6536)
+==35159==    by 0x4ECE387: Wt::WLogger::addLine(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, Wt::WStringStream const&) const (WLogger.C:279)
+==35159==    by 0x4ECE47A: Wt::WLogEntry::~WLogEntry() (WLogger.C:35)
+==35159==    by 0x5209CA6: Wt::WebSession::~WebSession() (WebSession.C:273)
+==35159==    by 0x51F0F75: checked_delete<Wt::WebSession> (checked_delete.hpp:36)
+==35159==    by 0x51F0F75: checked_delete<Wt::WebSession> (checked_delete.hpp:31)
+==35159==    by 0x51F0F75: boost::detail::sp_counted_impl_p<Wt::WebSession>::dispose() (sp_counted_impl.hpp:89)
+==35159==    by 0x51EE529: release (sp_counted_base_gcc_atomic.hpp:120)
+==35159==    by 0x51EE529: release (sp_counted_base_gcc_atomic.hpp:116)
+==35159==    by 0x51EE529: ~shared_count (shared_count.hpp:432)
+==35159==    by 0x51EE529: ~shared_ptr (shared_ptr.hpp:335)
+==35159==    by 0x51EE529: _Destroy<boost::shared_ptr<Wt::WebSession> > (stl_construct.h:151)
+==35159==    by 0x51EE529: __destroy<boost::shared_ptr<Wt::WebSession>*> (stl_construct.h:163)
+==35159==    by 0x51EE529: _Destroy<boost::shared_ptr<Wt::WebSession>*> (stl_construct.h:196)
+==35159==    by 0x51EE529: _Destroy<boost::shared_ptr<Wt::WebSession>*, boost::shared_ptr<Wt::WebSession> > (alloc_traits.h:854)
+==35159==    by 0x51EE529: ~vector (stl_vector.h:680)
+==35159==    by 0x51EE529: Wt::WebController::shutdown() (WebController.C:137)
+==35159==    by 0x55BFFE8: Wt::WServer::stop() (WServer.C:223)
+==35159==    by 0x10BEA0: main (in /home/wall/projects/Web/WittyApp/WittyApp/ServerWidget/build/unitTest/TableLayoutWt/TableLayoutWt)
+==35159== 
+==35159== HEAP SUMMARY:
+==35159==     in use at exit: 1,097,133 bytes in 8,672 blocks
+==35159==   total heap usage: 20,774 allocs, 12,102 frees, 9,872,330 bytes allocated
+==35159== 
+==35159== 3,520 bytes in 10 blocks are possibly lost in loss record 1,760 of 1,789
+==35159==    at 0x484DA83: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==35159==    by 0x40147D9: calloc (rtld-malloc.h:44)
+==35159==    by 0x40147D9: allocate_dtv (dl-tls.c:375)
+==35159==    by 0x40147D9: _dl_allocate_tls (dl-tls.c:634)
+==35159==    by 0x58DE834: allocate_stack (allocatestack.c:430)
+==35159==    by 0x58DE834: pthread_create@@GLIBC_2.34 (pthread_create.c:647)
+==35159==    by 0x5A821F3: boost::thread::start_thread_noexcept() (in /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.74.0)
+==35159==    by 0x4E8BF30: start_thread (thread.hpp:182)
+==35159==    by 0x4E8BF30: boost::thread::thread<boost::_bi::bind_t<void, boost::_mfi::mf0<void, Wt::WIOService>, boost::_bi::list1<boost::_bi::value<Wt::WIOService*> > > >(boost::_bi::bind_t<void, boost::_mfi::mf0<void, Wt::WIOService>, boost::_bi::list1<boost::_bi::value<Wt::WIOService*> > >&&) (thread.hpp:269)
+==35159==    by 0x4E844C3: Wt::WIOService::start() (WIOService.C:95)
+==35159==    by 0x55C08BC: Wt::WServer::start() (WServer.C:178)
+==35159==    by 0x10BE8B: main (in /home/wall/projects/Web/WittyApp/WittyApp/ServerWidget/build/unitTest/TableLayoutWt/TableLayoutWt)
+==35159== 
+==35159== LEAK SUMMARY:
+==35159==    definitely lost: 0 bytes in 0 blocks
+==35159==    indirectly lost: 0 bytes in 0 blocks
+==35159==      possibly lost: 3,520 bytes in 10 blocks
+==35159==    still reachable: 1,091,597 bytes in 8,641 blocks
+==35159==         suppressed: 0 bytes in 0 blocks
+==35159== Reachable blocks (those to which a pointer was found) are not shown.
+==35159== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==35159== 
+==35159== For lists of detected and suppressed errors, rerun with: -s
+==35159== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

@@ -1,0 +1,42 @@
+# Build Flag
+# BF_RESERVED	:=	0	BF_NOT_USE		:=	1
+# BF_NOT_INC	:=	2	BF_NOT_BUILD	:=	3
+# BF_BUILD		:=	4	BF_TEST			:=	5
+DEVICE_BFLAG	:= $(BF_BUILD)
+
+DEVICE_BASE	:= $(ROOT_BASE)/Device
+# Rename
+# $(DEVICE_BASE)
+include $(DEVICE_BASE)/Makefile.Device
+
+# Rename
+# $(DEVICE_BASE)
+export DEVICE_BUILD			:= build/Device
+export DEVICE_BUILD_BASE	:= $(SERVER_WIDGET_BASE)/$(DEVICE_BUILD)
+export DEVICE_BUILD_PATH	:= $(SERVER_WIDGET_BASE)/$(DEVICE_BUILD)/
+
+DEVICE_OBJ					:= $(filter-out $(BUILD_PATH), $(DEVICE_OBJ))
+export DEVICE_DIR 			:= $(dir $(DEVICE_OBJ))
+export DEVICE_BUILD_DIR 	:= $(subst $(DEVICE_BASE), $(DEVICE_BUILD_BASE), $(DEVICE_DIR))
+
+DEVICE_OBJ 				:= $(subst $(DEVICE_BASE), $(DEVICE_BUILD_BASE), $(DEVICE_OBJ))
+DEVICE_DEP 				:= $(subst $(DEVICE_BASE), $(DEVICE_BUILD_BASE), $(DEVICE_DEP))
+
+EXTERNAL_BUILD_DIR		+= $(sort $(DEVICE_BUILD_DIR))
+EXTERNAL_BUILD_BASE		+= $(DEVICE_BUILD_BASE)
+EXTERNAL_BASE			+= $(DEVICE_BASE)
+EXTERNAL_OBJ			+= $(DEVICE_OBJ)
+
+EXTRA_MLD_INC			+= $(addprefix -I,$(DEVICE_DIR))
+MLD_INC					+= $(sort $(EXTRA_MLD_INC))
+
+#======================================================================
+# build external external object, deps
+#======================================================================
+$(DEVICE_BUILD_BASE)/%.o: $(DEVICE_BASE)/%.c
+	$(CC) $(CFLAGS) $(MLD_INC) -MM -MT $@ -MF $(patsubst %.o,%.deps,$@) $<		
+	$(CC) $(CFLAGS) $(MLD_INC) -c $< -o $@
+
+$(DEVICE_BUILD_BASE)/%.o: $(DEVICE_BASE)/%.cpp
+	$(CXX) $(CXXFLAGS) $(MLD_INC) -MM -MT $@ -MF $(patsubst %.o,%.deps,$@) $<
+	$(CXX) $(CXXFLAGS) $(MLD_INC) -c $< -o $@
