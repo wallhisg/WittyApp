@@ -6,13 +6,20 @@
 
 .header-icon {
   background-color: aqua;
+/*  display: block;
+  margin-left: auto;
+  margin-right: auto;*/
+  width: 20%;
+  
 }
 
 .header-banner {
-  background-color: aqua;
-  float: right;
-  font-size: 30px;
-  width: 100%;
+  background-color: green;
+  /*float: right;*/
+  font-size: 40px;
+  /*margin: auto;*/
+  text-align: center;
+  /*width: 60%;*/
 }
 
 .footer {
@@ -28,11 +35,14 @@
 }
 
 .table {
-  border: 2px solid blue;
+  border: 2px solid green;
+  width: 25%;
 }
 
 .table-dev {
-  border: 2px solid blue;
+  border: 2px solid red;
+  margin: 100px;
+  
 }
 
 .dev-it {

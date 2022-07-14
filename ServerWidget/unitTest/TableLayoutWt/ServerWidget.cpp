@@ -3,36 +3,35 @@
 ServerWidget::ServerWidget(WVBoxLayout *parent)
 	: mainLayout_(parent)
 {
+	header_ = new TableLayout();
+	content_ = new TableLayout();
+	footer_ = new TableLayout();
 
+	mainLayout_->addLayout(header_->vLayout());
+	mainLayout_->addLayout(content_->vLayout());
+	mainLayout_->addLayout(footer_->vLayout());
 }
 
 void ServerWidget::createUi()
 {
 	renderHeader();
 	renderContent();
+	renderFooter();
 
 }
 
 void ServerWidget::renderHeader()
 {
-	headerIcon_ = new Wt::WImage("resources/icons/DongA.png");
-	headerIcon_->setStyleClass("header-icon");
 
-	headerBanner_ = new WText(WString::tr("header.banner"));
-	headerBanner_->setStyleClass("header-banner");
-
-	header_ = new Header(headerIcon_, headerBanner_);
-	mainLayout_->addLayout(header_->vLayout());
 }
 
 void ServerWidget::renderContent()
 {
-	content_ = new Content();
 
-	tbl_tr_devId_ = new WText(WString::tr("tbl.tr.devId"));
 
-	content_->addWidget(0, 0, tbl_tr_devId_);
+}
 
-	mainLayout_->addLayout(content_->vLayout());
+void ServerWidget::renderFooter()
+{
 
 }

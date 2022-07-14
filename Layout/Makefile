@@ -1,19 +1,19 @@
 export ROOT_BASE		?=	$(abspath $(dir $(abspath $(dir $$PWD))))
-export LAYOUT_BASE			?=	$(abspath $(dir $$PWD))
-export LAYOUT_PATH			?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+export LAYOUT_BASE		?=	$(abspath $(dir $$PWD))
+export LAYOUT_PATH		?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 export LAYOUT_SRC_C		:=
 export LAYOUT_OBJ_C		:=
 export LAYOUT_DEP_C		:=
 
-export LAYOUT_SRC_CPP		:=
-export LAYOUT_OBJ_CPP		:=
-export LAYOUT_DEP_CPP		:=
+export LAYOUT_SRC_CPP	:=
+export LAYOUT_OBJ_CPP	:=
+export LAYOUT_DEP_CPP	:=
 
-export LAYOUT_OBJ			:=
-export LAYOUT_DEPS			:=
+export LAYOUT_OBJ		:=
+export LAYOUT_DEPS		:=
 
-export LAYOUT_LIB			:=
+export LAYOUT_LIB		:=
 export EXTRA_LIB		:=
 
 export MDL_PATH			:=

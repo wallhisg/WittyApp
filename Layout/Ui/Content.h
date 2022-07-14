@@ -12,12 +12,12 @@
 #include <Wt/WPushButton>
 
 #include <vector>
-#include <TableLayout.h>
+#include <Table.h>
 
 using namespace std;
 using namespace Wt;
 
-class Content : public TableLayout
+class Content : public Table
 {
 public:
 	Content();

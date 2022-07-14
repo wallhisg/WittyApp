@@ -33,7 +33,7 @@ void Layout::renderHeader()
 
 void Layout::renderContent()
 {
-	// tbl_tr_devWt_ = new TableLayout();
+	// tbl_tr_devWt_ = new Table();
 
 	// WText *tbl_tr_devId_ = new WText(WString::tr("tbl.tr.devId"));
 	// tbl_tr_devId_->setStyleClass("table");
@@ -47,7 +47,7 @@ void Layout::renderContent()
 	// tbl_tr_devWt_->setAlignment(0, 1, AlignCenter);
 
 	// Content *content  = new Content();
-	// content->addTableLayout(tbl_tr_devWt_);
+	// content->addTable(tbl_tr_devWt_);
 	// mainLayout_->addLayout(content->vLayout());
 }
 

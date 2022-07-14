@@ -16,7 +16,7 @@
 #include <Wt/WBootstrapTheme>
 #include <Wt/WCssTheme>
 
-#include <TableLayout.h>
+#include <Table.h>
 #include <DeviceLayout.h>
 #include <Header.h>
 
@@ -82,7 +82,7 @@ private:
 	WText *banner;
 	Header *header;
 	// Content
-    // TableLayout *tbl_tr_devWt_;
+    // Table *tbl_tr_devWt_;
 };
 
 

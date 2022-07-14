@@ -1,63 +1,37 @@
-#ifndef WTABLE_LAYOUT
-#define WTABLE_LAYOUT
+#ifndef TABLE_LAYOUT_H
+#define TABLE_LAYOUT_H
 
-#include <Wt/WVBoxLayout>
-#include <Wt/WTable>
-#include <Wt/WWidget>
+#include <Wt/WTableCell>
+#include <Wt/WTableRow>
+#include <Wt/WTableColumn>
 
-using namespace std;
-using namespace Wt;
+#include "Table.h"
 
-class TableLayout
+
+class TableLayout : public Table
 {
 public:
-	TableLayout()
-		:	currRow_(0),
-			currCol_(0)
-	{
-		table_ = new WTable();
-	}
+	TableLayout();
 
 	~TableLayout()
 	{
-		delete table_;
+		delete vLayout_;
 	}
-
-	void setRow(const unsigned short row) { currRow_ = row; }
-	void setColumn(const unsigned short col) { currCol_ = col; }
-
-	unsigned short getRow() const { return currRow_; }
-	unsigned short getCol() const { return currCol_; }
-
-	void addTrWidget(WWidget *widget);
-	void addTrWidget(const unsigned short col, WWidget *widget);
-	void addWidget(const unsigned short row, const unsigned short col, 
-					WWidget *widget);
-
-	void addWidget(WWidget *widget);
-
-	void setLength(const unsigned short col, const unsigned char  per);
-	void setLength(const unsigned char  per);
-
-	void setAlignment(const unsigned short row, const unsigned short col, 
-						Wt::AlignmentFlag alignment);
-	void setAlignment(Wt::AlignmentFlag alignment);
-
-	void setPadding(const unsigned short row, const unsigned short col,
-					const unsigned short pad);
-	void setPadding(const unsigned short pad);
-	void setMargin(const unsigned short row, const unsigned short col,
-					const unsigned short margin);
-
 	void setStyleClass(const WString &style);
-
-	WTable *table() { return table_; }
+	void setStyleClassCell(const unsigned short row, const unsigned short col, const WString &style);
+	void setStyleClassRow(const unsigned short row, const WString &style);
+	void setStyleClassColumn(const unsigned short col, const WString &style);
+	
+	WVBoxLayout *vLayout() const { return vLayout_; }
 
 private:
-	unsigned short currRow_;
-	unsigned short currCol_;
-	
-	WTable *table_;
+	WVBoxLayout *vLayout_;
 };
 
-#endif	//	WTABLE_LAYOUT
+
+
+
+
+
+
+#endif	//	TABLE_LAYOUT

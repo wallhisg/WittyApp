@@ -10,29 +10,27 @@
 #include <Wt/WText>
 #include <Wt/WPushButton>
 
-#include <TableLayout.h>
+#include <Table.h>
 
 using namespace std;
 using namespace Wt;
 
-class Header : public TableLayout
+class Header : public Table
 {
 public:
-	Header(WImage *headerIcon, WText *headerBanner);
+	Header();
+	
 	~Header()
 	{
 		delete vLayout_;
 	}
+	void renderIcon(const unsigned short row, const short col, WImage *icon);
+	void renderBanner(const unsigned short row, const short col, WWidget *banner);
 
 	WVBoxLayout *vLayout() const { return vLayout_; }
 
 private:
 	WVBoxLayout *vLayout_;
-
-	WImage *headerIcon_;
-	WText *headerBanner_;
-
-	void renderHeader();
 };
 
 #endif	//	HEADER_H

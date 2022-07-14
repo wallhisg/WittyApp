@@ -1,24 +1,17 @@
 #include "Header.h"
 
-Header::Header(WImage *headerIcon, WText *headerBanner)
-	: 	headerIcon_(headerIcon),
-		headerBanner_(headerBanner)
+Header::Header()
 {
 	vLayout_ = new WVBoxLayout();
-
-	renderHeader();
+	vLayout_->addWidget(this->table());
 }
 
-void Header::renderHeader()
+void Header::renderIcon(const unsigned short row, const short col, WImage *icon)
 {
-	// render Icon
-	this->addWidget(0, 0, headerIcon_);
-	this->setLength(0, 25);
-	this->setAlignment(0,0, AlignCenter);
+	this->addWidget(row, col, icon);
+}
 
-	// // // render banner
-	this->addWidget(0, 1, headerBanner_);
-	this->setAlignment(0, 1, AlignCenter);
-
-	vLayout_->addWidget(this->table());
+void Header::renderBanner(const unsigned short row, const short col, WWidget *banner)
+{
+	this->addWidget(row, col, banner);
 }

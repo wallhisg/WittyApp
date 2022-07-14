@@ -8,9 +8,8 @@
 #include <Wt/WImage>
 #include <Wt/WText>
 
+#include <Table.h>
 #include <TableLayout.h>
-#include <Header.h>
-#include <Content.h>
 
 class ServerWidget
 {
@@ -18,30 +17,27 @@ public:
 	ServerWidget(WVBoxLayout *parent);
 	~ServerWidget()
 	{
-		mainLayout_->removeItem(header_->vLayout());
-		delete headerIcon_;
-		delete headerBanner_;
-		delete header_;
-
+		mainLayout_->removeItem(footer_->vLayout());
 		mainLayout_->removeItem(content_->vLayout());
-		delete tbl_tr_devId_;
+		mainLayout_->removeItem(header_->vLayout());
+
+		delete header_;
 		delete content_;
+		delete footer_;
 	}
 
 	void createUi();
+
 	void renderHeader();
 	void renderContent();
+	void renderFooter();
 
 private:
 	WVBoxLayout *mainLayout_;
 
-	// Header
-	Header *header_;
-	Wt::WImage* headerIcon_;
-	WText *headerBanner_;
-	// Content
-	Content *content_;
-	WText *tbl_tr_devId_;
+	TableLayout *header_;
+	TableLayout *content_;
+	TableLayout *footer_;
 };
 
 

@@ -14,7 +14,7 @@
 #include <Wt/WBootstrapTheme>
 #include <Wt/WCssTheme>
 
-#include <TableLayout.h>
+#include <Table.h>
 #include "ServerWidget.h"
 
 using namespace Wt;

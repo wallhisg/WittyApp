@@ -24,11 +24,12 @@ endif
 MAKEOVERRIDES 	+= $(sort $(foreach v,$(__DIRECTORY_VARIABLES),$($(v))))
 
 # include all make file
-LAYOUT_CLIENT_MAKEFILE 	+=	$(foreach sdir, $(MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
-SUBDIR                +=	$(foreach sdir, $(MAKEOVERRIDES), $(sdir))
+LAYOUT_MAKEFILE 	   +=	$(foreach sdir, $(MAKEOVERRIDES), $(addprefix $(sdir)/, Makefile))
+SUBDIR               +=	$(foreach sdir, $(MAKEOVERRIDES), $(sdir))
 # filter-out
-SUBDIR_OUT            :=  $(LAYOUT_UNIT_TEST)
+SUBDIR_OUT           :=  $(LAYOUT_UNIT_TEST)
 # Add include
-SUBDIR_MDL            :=  $(filter-out $(SUBDIR_OUT), $(SUBDIR))
-MLD_INC               +=  $(addprefix -I,$(SUBDIR_MDL))
-include $(LAYOUT_CLIENT_MAKEFILE)
+SUBDIR_MDL           :=  $(filter-out $(SUBDIR_OUT), $(SUBDIR))
+MLD_INC              +=  $(addprefix -I,$(SUBDIR_MDL))
+
+include $(LAYOUT_MAKEFILE)

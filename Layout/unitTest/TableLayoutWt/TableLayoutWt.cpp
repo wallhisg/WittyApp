@@ -11,7 +11,7 @@
 #include <Wt/WCssTheme>
 
 #include "ServerApplication.h"
-#include <TableLayout.h>
+#include <Table.h>
 
 
 WApplication *createApplication(const WEnvironment& env)

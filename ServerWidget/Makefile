@@ -1,19 +1,19 @@
-export ROOT_BASE		?=	$(abspath $(dir $(abspath $(dir $$PWD))))
-export SERVER_WIDGET_BASE			?=	$(abspath $(dir $$PWD))
-export SERVER_WIDGET_PATH			?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+export ROOT_BASE				?=	$(abspath $(dir $(abspath $(dir $$PWD))))
+export SERVER_WIDGET_BASE		?=	$(abspath $(dir $$PWD))
+export SERVER_WIDGET_PATH		?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 export SERVER_WIDGET_SRC_C		:=
 export SERVER_WIDGET_OBJ_C		:=
 export SERVER_WIDGET_DEP_C		:=
 
-export SERVER_WIDGET_SRC_CPP		:=
-export SERVER_WIDGET_OBJ_CPP		:=
-export SERVER_WIDGET_DEP_CPP		:=
+export SERVER_WIDGET_SRC_CPP	:=
+export SERVER_WIDGET_OBJ_CPP	:=
+export SERVER_WIDGET_DEP_CPP	:=
 
-export SERVER_WIDGET_OBJ			:=
-export SERVER_WIDGET_DEPS			:=
+export SERVER_WIDGET_OBJ		:=
+export SERVER_WIDGET_DEPS		:=
 
-export SERVER_WIDGET_LIB			:=
+export SERVER_WIDGET_LIB		:=
 export EXTRA_LIB		:=
 
 export MDL_PATH			:=
@@ -67,4 +67,3 @@ MV		:= mf -f
 test:
 	@echo	$(WIDGET_DIR)
 	@echo	$(EXTRA_MLD_INC)
-

@@ -14,7 +14,7 @@
 #include <Wt/WCssTheme>
 
 #include "Layout.h"
-#include "TableLayout.h"
+#include "Table.h"
 
 using namespace Wt;
 using namespace std;
