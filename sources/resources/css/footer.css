@@ -1,0 +1,20 @@
+.footer {
+	border: 2px solid green;
+	/*width: 100%;*/
+}
+
+.footer-table {
+	border: 2px solid green;
+}
+
+.footer-col-left {
+	border: 2px solid red;
+}
+
+.footer-col-middle {
+	border: 2px solid green;
+}
+
+.footer-col-right {
+	border: 2px solid blue;
+}

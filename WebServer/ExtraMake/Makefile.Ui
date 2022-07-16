@@ -1,0 +1,39 @@
+# Build Flag
+# BF_RESERVED	:=	0	BF_NOT_USE		:=	1
+# BF_NOT_INC	:=	2	BF_NOT_BUILD	:=	3
+# BF_BUILD		:=	4	BF_TEST			:=	5
+UI_BFLAG	:= $(BF_BUILD)
+
+UI_BASE	:= $(ROOT_BASE)/Ui
+
+include $(UI_BASE)/Makefile.Ui
+
+export UI_BUILD			:= build/Ui
+export UI_BUILD_BASE	:= $(WEB_SERVER_BASE)/$(UI_BUILD)
+export UI_BUILD_PATH	:= $(WEB_SERVER_BASE)/$(UI_BUILD)/
+
+UI_OBJ					:= $(filter-out $(BUILD_PATH), $(UI_OBJ))
+export UI_DIR 			:= $(dir $(UI_OBJ))
+export UI_BUILD_DIR 	:= $(subst $(UI_BASE), $(UI_BUILD_BASE), $(UI_DIR))
+
+UI_OBJ 				:= $(subst $(UI_BASE), $(UI_BUILD_BASE), $(UI_OBJ))
+UI_DEP 				:= $(subst $(UI_BASE), $(UI_BUILD_BASE), $(UI_DEP))
+
+EXTERNAL_BUILD_DIR		+= $(sort $(UI_BUILD_DIR))
+EXTERNAL_BUILD_BASE		+= $(UI_BUILD_BASE)
+EXTERNAL_BASE			+= $(UI_BASE)
+EXTERNAL_OBJ			+= $(UI_OBJ)
+
+EXTRA_MLD_INC			+= $(addprefix -I,$(UI_DIR))
+MLD_INC					+= $(sort $(EXTRA_MLD_INC))
+
+#======================================================================
+# build external external object, deps
+#======================================================================
+$(UI_BUILD_BASE)/%.o: $(UI_BASE)/%.c
+	$(CC) $(CFLAGS) $(MLD_INC) -MM -MT $@ -MF $(patsubst %.o,%.deps,$@) $<		
+	$(CC) $(CFLAGS) $(MLD_INC) -c $< -o $@
+
+$(UI_BUILD_BASE)/%.o: $(UI_BASE)/%.cpp
+	$(CXX) $(CXXFLAGS) $(MLD_INC) -MM -MT $@ -MF $(patsubst %.o,%.deps,$@) $<
+	$(CXX) $(CXXFLAGS) $(MLD_INC) -c $< -o $@
