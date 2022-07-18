@@ -1,16 +1,19 @@
 
 LAYOUT_UNIT_TEST  ?=  $(LAYOUT_BASE)/unitTest
 LAYOUT_LAYOUT     ?=  $(LAYOUT_BASE)/Layout
+LAYOUT_WIDGET     ?=  $(LAYOUT_BASE)/WidgetLayout
 LAYOUT_UI         ?=  $(LAYOUT_BASE)/Ui
 
 __DIRECTORY_VARIABLES :=    \
 	LAYOUT_UNIT_TEST          \
 	LAYOUT_LAYOUT             \
+  LAYOUT_WIDGET             \
   LAYOUT_UI                 
 
 override LAYOUT_BASE        := $(abspath $(LAYOUT_BASE))
 override LAYOUT_UNIT_TEST   := $(abspath $(LAYOUT_UNIT_TEST))
 override LAYOUT_LAYOUT      := $(abspath $(LAYOUT_LAYOUT))
+override LAYOUT_WIDGET      := $(abspath $(LAYOUT_WIDGET))
 override LAYOUT_UI          := $(abspath $(LAYOUT_UI))
 
 # Ensure that all directories are set and don't contain spaces.

@@ -8,7 +8,10 @@
 #include <Wt/WImage>
 #include <Wt/WText>
 
-#include <Ui.h>
+#include <Table.h>
+#include <TableLayout.h>
+#include "Header.h"
+#include "Content.h"
 
 class ServerWidget
 {
@@ -16,16 +19,22 @@ public:
 	ServerWidget(WVBoxLayout *parent);
 	~ServerWidget()
 	{
-
+		mainLayout_->removeItem(header_->layout());
+		delete header_;
 	}
 
 	void createUi();
 
+	void renderHeader();
+
+
 private:
 	WVBoxLayout *mainLayout_;
 
-	Ui *ui_;
+	Layout *header_;
+
 };
 
 
 #endif	//	SERVER_WIDGET_H
+

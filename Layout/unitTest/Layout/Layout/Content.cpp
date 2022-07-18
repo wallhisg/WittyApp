@@ -10,5 +10,5 @@ Content::Content()
 void Content::renderContent()
 {
 
-	vLayout_->addWidget(this->table());
+	vLayout_->addWidget(this->table_);
 }

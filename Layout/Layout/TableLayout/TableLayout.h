@@ -1,46 +1,74 @@
 #ifndef TABLE_LAYOUT_H
 #define TABLE_LAYOUT_H
 
-#include <Wt/WTableCell>
-#include <Wt/WTableRow>
-#include <Wt/WTableColumn>
+#include <Wt/WLayout>
+#include <Wt/WVBoxLayout>
+#include <Wt/WHBoxLayout>
+#include <Wt/WAnimation>
+#include <vector>
+#include <TableStyle.h>
 
-#include "Table.h"
+using namespace std;
+using namespace Wt;
 
-
-class TableLayout : public Table
+class TableLayout : public TableStyle
 {
 public:
 	TableLayout();
 
 	~TableLayout()
 	{
-		vLayout_->removeWidget(this->table());
+		vLayout_->removeWidget(this->table_);
+		eraseLayout();
 		delete vLayout_;
 	}
 
-	void setStyleClass(const WString &style);
-	void setStyleClassCell(const int row, const int col, const WString &style);
-	void setStyleClassRow(const int row, const WString &style);
-	void setStyleClassColumn(const int col, const WString &style);
-	
-	void setBlankRowHeight(const int row, const int height);
-	void setBlankRowHeight(const int row, const WString &style);
+	void addLayout(TableLayout *tableLayout);
+	void addLayout(WVBoxLayout *layout);
 
-	void setBlankLeftWidth(const int percentage);
-	void setBlankLeftWidth(const WString &style);
-	void setBlankRightWidth(const int percentage);
-	void setBlankRightWidth(const WString &style);
+	void removeLayout(TableLayout *tableLayout);
+	void removeLayout(WVBoxLayout *layout);
 
-	void setBlankTopHeight(const int height);
-	void setBlankTopHeight(const WString &style);
-	void setBlankBottonHeight(const int height);
-	void setBlankBottonHeight(const WString &style);
 
-	WVBoxLayout *vLayout() const { return vLayout_; }
-
+	WVBoxLayout *layout() const { return vLayout_; }
 private:
 	WVBoxLayout *vLayout_;
+
+	vector<WVBoxLayout *> layouts_;
+
+	void insertLayout(WVBoxLayout *layout)
+	{
+		vLayout_->addItem(layout);
+		layouts_.push_back(layout);
+	}
+
+	void eraseLayout()
+	{
+		for (vector<WVBoxLayout *>::iterator it = layouts_.begin(); 
+				it != layouts_.end(); ++it)
+		{
+			vLayout_->removeItem(*it);
+		}	
+	}
+
+	void eraseLayout(WVBoxLayout *layout)
+	{
+		for (vector<WVBoxLayout *>::iterator it = layouts_.begin(); 
+				it != layouts_.end(); ++it)
+		{
+			if (*it == layout)
+			{
+				vLayout_->removeItem(*it);
+				/**
+				
+					TODO:
+					- fix it later using LinkedList
+				 */
+				
+				// layouts_.delete(it);
+			}
+		}	
+	}
 };
 
-#endif	//	TABLE_LAYOUT
+#endif	//	TABLE_LAYOUT_H

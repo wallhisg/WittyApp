@@ -11,11 +11,8 @@
 #include <Wt/WCssTheme>
 
 #include "ServerApplication.h"
+#include <Table.h>
 
-void ServerAppication::WebApplication()
-{
-
-}
 
 WApplication *createApplication(const WEnvironment& env)
 {

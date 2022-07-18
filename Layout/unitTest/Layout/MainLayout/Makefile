@@ -21,18 +21,18 @@ LAYOUT_LOCAL_DEP 		+=	$(LAYOUT_LOCAL_DEP_C)
 LAYOUT_LOCAL_DEP 		+=	$(LAYOUT_LOCAL_DEP_CPP)
 #----------------------------------------------------------------------------------
 # object
-TEMPLATE_OBJ_C			:= $(subst $(LAYOUT_PATH), $(BUILD_PATH), $(patsubst %.c, %.o, $(LAYOUT_LOCAL_SRC_C)))
-TEMPLATE_OBJ_CPP		:= $(subst $(LAYOUT_PATH), $(BUILD_PATH), $(patsubst %.cpp, %.o, $(LAYOUT_LOCAL_SRC_CPP)))
+MAIN_LAYOUT_OBJ_C		:= $(subst $(LAYOUT_PATH), $(BUILD_PATH), $(patsubst %.c, %.o, $(LAYOUT_LOCAL_SRC_C)))
+MAIN_LAYOUT_OBJ_CPP	:= $(subst $(LAYOUT_PATH), $(BUILD_PATH), $(patsubst %.cpp, %.o, $(LAYOUT_LOCAL_SRC_CPP)))
 
-LAYOUT_TEST_OBJ			+=	$(TEMPLATE_OBJ_C)
-LAYOUT_TEST_OBJ			+=	$(TEMPLATE_OBJ_CPP)
+LAYOUT_TEST_OBJ		+=	$(MAIN_LAYOUT_OBJ_C)
+LAYOUT_TEST_OBJ		+=	$(MAIN_LAYOUT_OBJ_CPP)
 #----------------------------------------------------------------------------------
 # target
 TARGET		:= $(shell basename $(LAYOUT_LOCAL_BASE))
 PROGRAM		:= $(addprefix $(LAYOUT_LOCAL_BASE), $(TARGET))
 PROGRAM		:= $(subst $(LAYOUT_PATH), $(BUILD_PATH), $(PROGRAM))
 
-$(PROGRAM): $(TEMPLATE_OBJ_C) $(TEMPLATE_OBJ_CPP) $(EXTERNAL_OBJ)
-	$(CXX) $(LAYOUT_OBJ) $^ $(LIBS) -lstdc++ -o $@
+$(PROGRAM): $(MAIN_LAYOUT_OBJ_C) $(MAIN_LAYOUT_OBJ_CPP) $(EXTERNAL_OBJ)
+	$(CXX) $(LAYOUT_OBJ) $(EXTERNAL_OBJ) $^ $(LIBS) -lstdc++ -o $@
 #----------------------------------------------------------------------------------
 include $(LAYOUT_BASE)/Makefile.bas

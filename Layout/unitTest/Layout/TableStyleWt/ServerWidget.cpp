@@ -15,9 +15,10 @@ void ServerWidget::createUi()
 void ServerWidget::renderHeader()
 {
 	header_ = new TableLayout();
+	header_->setStyleClass("table");
 	// header_->setBlankLeftWidth(25);
-	header_->setBlankLeftWidth("table-blank");
-	header_->setBlankTopHeight("table-blank-top");
+	// header_->setBlankLeftWidth("table-blank");
+	// header_->setBlankTopHeight("table-blank-top");
 
 	WImage *headerIcon_ = new Wt::WImage("resources/icons/DongA.png");
 	// headerIcon_->setStyleClass("header-icon");
@@ -35,8 +36,8 @@ void ServerWidget::renderHeader()
 	header_->addWidget(0, 1, headerBanner_);
 	// header_->setStyleClassCell(0, 1, "header-banner");
 
-	header_->setBlankBottonHeight("table-blank-botton");
-	header_->setBlankRightWidth("table-blank");
+	// header_->setBlankBottonHeight("table-blank-botton");
+	// header_->setBlankRightWidth("table-blank");
 
 	mainLayout_->addLayout(header_->vLayout());
 }

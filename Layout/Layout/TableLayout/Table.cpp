@@ -4,19 +4,19 @@
 void Table::addTrWidget(WWidget *widget)
 {
 	if (widget != NULL)
-		table_->elementAt(0, offsetColLeft_ + currCol_)->addWidget(widget);
+		table_->elementAt(offsetColLeft_ + 0, offsetColLeft_ + currCol_)->addWidget(widget);
 }
 
 void Table::addTrWidget(const int col, WWidget *widget)
 {
 	if (widget != NULL)
-		table_->elementAt(0, offsetColLeft_ + col)->addWidget(widget);
+		table_->elementAt(offsetColLeft_ + 0, offsetColLeft_ + col)->addWidget(widget);
 }
 
 void Table::addWidget(const int row, int col, 
 							WWidget *widget)
 {
-	if (widget != NULL)
+	if (widget != NULL) 
 		table_->elementAt(offsetRowTop_ + row, offsetColLeft_ + col)->addWidget(widget);
 }
 
@@ -24,6 +24,12 @@ void Table::addWidget(WWidget *widget)
 {
 	if (widget != NULL)
 		table_->elementAt(currRow_, offsetColLeft_ + currCol_)->addWidget(widget);
+}
+
+void Table::removeWidget(const int row, const int col)
+{
+	if ((row < table_->rowCount()) && (col < table_->columnCount()))
+		table_->removeCell(row, col);
 }
 
 void Table::setLength(const int col, const int  percentage)

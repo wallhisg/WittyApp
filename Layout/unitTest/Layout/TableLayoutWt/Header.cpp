@@ -3,7 +3,7 @@
 Header::Header()
 {
 	vLayout_ = new WVBoxLayout();
-	vLayout_->addWidget(this->table());
+	vLayout_->addWidget(this->table_);
 }
 
 void Header::renderIcon(const unsigned short row, const short col, WImage *icon)

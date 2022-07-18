@@ -2,7 +2,7 @@
 # BF_RESERVED	:=	0	BF_NOT_USE		:=	1
 # BF_NOT_INC	:=	2	BF_NOT_BUILD	:=	3
 # BF_BUILD		:=	4	BF_TEST			:=	5
-BFLAG	:= $(BF_NOT_BUILD)
+BFLAG	:= $(BF_TEST)
 #----------------------------------------------------------------------------------
 UI_LOCAL_BASE		:= $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 UI_LOCAL_MDL			:= $(sort $(dir $(wildcard $(UI_LOCAL_BASE)*/)))

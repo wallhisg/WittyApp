@@ -36,11 +36,13 @@ public:
 
 	void addTrWidget(WWidget *widget);
 	void addTrWidget(const int col, WWidget *widget);
+
 	void addWidget(const int row, const int col, 
 					WWidget *widget);
-
 	void addWidget(WWidget *widget);
 
+	void removeWidget(const int row, const int col);
+	
 	void setLength(const int col, const int percentage);
 	void setLength(const int  percentage);
 

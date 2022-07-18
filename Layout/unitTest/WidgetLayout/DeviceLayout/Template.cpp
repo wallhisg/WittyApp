@@ -17,6 +17,7 @@ void ServerAppication::WebApplication()
 
 }
 
+
 WApplication *createApplication(const WEnvironment& env)
 {
     return new ServerAppication(env);
