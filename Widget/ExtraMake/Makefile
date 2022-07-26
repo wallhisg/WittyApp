@@ -1,1 +1,0 @@
-include $(WIDGET_BASE)/ExtraMake/Makefile.Device

@@ -62,10 +62,10 @@ private:
 				/**
 				
 					TODO:
-					- fix it later using LinkedList
+					- fix it later use LinkedList
 				 */
 				
-				// layouts_.delete(it);
+				// layouts_.delete(it);	<---
 			}
 		}	
 	}

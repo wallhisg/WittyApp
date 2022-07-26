@@ -44,7 +44,7 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
-include $(WEB_SERVER_BASE)/ExtraMake/Makefile
+include $(WEB_SERVER_BASE)/Makefiles/Makefile
 include $(WEB_SERVER_BASE)/Makefile.inc
 include $(WEB_SERVER_BASE)/Makefile.bas
 include $(WEB_SERVER_BASE)/Makefile.env

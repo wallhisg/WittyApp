@@ -54,6 +54,8 @@ private:
     struct device device_;
 };
 
+
+
 class Devices
 {
 public:

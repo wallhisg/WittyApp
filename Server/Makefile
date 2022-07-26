@@ -1,19 +1,19 @@
-export ROOT_BASE		?=	$(abspath $(dir $(abspath $(dir $$PWD))))
-export WEB_SERVER_BASE			?=	$(abspath $(dir $$PWD))
-export WEB_SERVER_PATH			?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+export ROOT_BASE			?=	$(abspath $(dir $(abspath $(dir $$PWD))))
+export WEB_SERVER_BASE		?=	$(abspath $(dir $$PWD))
+export WEB_SERVER_PATH		?=	$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 export WEB_SERVER_SRC_C		:=
 export WEB_SERVER_OBJ_C		:=
 export WEB_SERVER_DEP_C		:=
 
-export WEB_SERVER_SRC_CPP		:=
-export WEB_SERVER_OBJ_CPP		:=
-export WEB_SERVER_DEP_CPP		:=
+export WEB_SERVER_SRC_CPP	:=
+export WEB_SERVER_OBJ_CPP	:=
+export WEB_SERVER_DEP_CPP	:=
 
-export WEB_SERVER_OBJ			:=
-export WEB_SERVER_DEPS			:=
+export WEB_SERVER_OBJ		:=
+export WEB_SERVER_DEPS		:=
 
-export WEB_SERVER_LIB			:=
+export WEB_SERVER_LIB		:=
 export EXTRA_LIB		:=
 
 export MDL_PATH			:=
@@ -44,7 +44,7 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
-include $(WEB_SERVER_BASE)/ExtraMake/Makefile
+include $(WEB_SERVER_BASE)/Makefiles/Makefile
 include $(WEB_SERVER_BASE)/Makefile.inc
 include $(WEB_SERVER_BASE)/Makefile.bas
 include $(WEB_SERVER_BASE)/Makefile.env
@@ -67,5 +67,3 @@ test:
 	@echo	$(EXTERNAL_BUILD_DIR)
 	@echo	$(EXTERNAL_BUILD_BASE)
 	@echo	$(EXTERNAL_BASE)
-
-	

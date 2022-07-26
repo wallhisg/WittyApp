@@ -44,7 +44,7 @@ export	BF_TEST			:=	5
 
 export	RESOURCES_DIR	:=	
 
-include $(WIDGET_BASE)/ExtraMake/Makefile
+include $(WIDGET_BASE)/Makefiles/Makefile
 include $(WIDGET_BASE)/Makefile.inc
 include $(WIDGET_BASE)/Makefile.bas
 include $(WIDGET_BASE)/Makefile.env

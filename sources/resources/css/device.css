@@ -2,43 +2,55 @@
   width: 100%;
 }
 
-.table-dev {
-  border: 2px solid red;
-  margin: 100px;
+.dev-table-blank {
+  width: 5%;
+}
+
+/* blank 4 side */
+.dev-table-blank-left {
+  background-color: #04AA6D;
+  color: white; 
+  width: 5%;
+}
+
+.dev-table-blank-right {
+  background-color: #04AA6D;
+  color: white;
+  width: 5%;
+}
+
+.dev-table-blank-top {
+  background-color: #04AA6D;
+  color: white;
+  height:  30px;
+}
+
+.dev-table-blank-botton {
+  background-color: #04AA6D;
+  color: white;
+  height:  30px;
 }
 
 .dev-it {
-  border: 2px solid blue;
+  /*background-color: #04AA6D;*/
 }
 
 .dev-id  {
-  background-color: aqua;
-  font-size: 20px;
+  /*background-color: #04AA6D;*/
 }
 
 .dev-ip  {
-  background-color: aqua;
-  border-top: 1px solid red;
-  font-size: 20px;
-  margin-bottom: 1px;
-  margin-left: 1px;
-/*  margin-top: 1px;
-  margin-right: 1px;*/
+  /*background-color: #04AA6D;*/
 }
 
 .dev-name  {
-  background-color: aqua;
-  border-top: 1px solid red;
-  font-size: 20px;
-  margin: 1px;
+  /*background-color: #04AA6D;*/
 }
 
 .dev-value  {
-  background-color: aqua;
-  border-top: 1px solid red;
-  font-size: 20px;
-  margin-bottom: 1px;
-  margin-left: 1px;
-/*  margin-top: 1px;
-  margin-right: 1px;*/
+  /*background-color: #04AA6D;*/
+}
+
+.dev-control  {
+  /*background-color: #04AA6D;*/
 }
